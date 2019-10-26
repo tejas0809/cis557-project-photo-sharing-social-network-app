@@ -1,0 +1,223 @@
+html,body{
+  height: 100%;
+  width:100%;
+}
+
+nav{
+  transition: all 0.4s;
+}
+
+.navbar{
+  background-color: black;
+  border-color: black;
+  padding: 1% 0;
+  box-shadow: 0px 10px 10px rgba(50,50,50,0.7);
+  transition: all 0.4s ease;
+}
+
+.navbar li a{
+  font-size: 1.5em;
+}
+.navbar-brand{
+  min-height: 90px;
+  padding: 0 5px 5px 5px;
+}
+
+.navbar-default .navbar-nav li a{
+   color: #D5D5D5;
+}
+
+.navbar-default .navbar-nav li a:hover{
+   color: white;
+   /* font-size: 2em; */
+}
+
+.navbar-default .navbar-nav li a:active{
+   color: white;
+}
+
+.shrink li a {
+  font-size: 0.8em;
+}
+.shrink{
+  max-height: 35px;
+}
+.logo{
+  transition: all 0.4s;
+}
+
+.shrinked{
+  max-height: 35px;
+  transition: all 0.4s;
+}
+
+#cover{
+  background: url(../images/cover1.jpg) no-repeat center center fixed;
+  display: table;
+  height:60%;
+  width:100%;
+  position: relative;
+  background-size: cover;
+}
+.landing-text{
+  color:white;
+
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+.landing-text h1{
+  text-transform: uppercase;
+  text-shadow: 2px 2px 2px #555555;
+  font-size: 500%;
+  font-weight: 700;
+}
+
+.landing-text h2{
+  text-shadow: 1px 1px 1px #555555;
+}
+.padding{
+  padding: 80px 0px;
+
+}
+
+.padding1{
+  box-shadow: 0px 10px 10px rgba(50,50,50,0.7);
+  background-color: black;
+  color: white;
+  padding: 20px 0px;
+  height:20%;
+}
+
+
+
+.padding img{
+  width: 100%;
+}
+
+#fixed{
+  background: url("../images/background.jpg") no-repeat center center fixed;
+  display: table;
+  height: 60%;
+  position: relative;
+  width:100%;
+  background-size: cover;
+}
+
+footer{
+  width: 100%;
+  background-color: black;
+  padding: 5% 5% 10% 5%;
+  color:#FFF;
+}
+
+.fa{
+  padding: 15px;
+  font-size: 2em;
+  color: #FFF;
+}
+
+.fa :hover{
+    color: #D5D5D5;
+}
+
+.icon{
+  max-width: 200px;
+}
+
+.ProfilePic{
+
+  position: absolute;
+  top:-125px;
+
+  /* max-height: 250px;
+  max-width: 250px; */
+  border-radius: 50%;
+
+}
+
+.ProfilePic img{
+  /* max-height: 250px;
+  max-width: 250px; */
+  border-radius: 50%;
+
+}
+.card{
+  box-shadow: 5px 5px 10px rgba(60,60,60,0.7);
+}
+.card-title{
+  padding: 20px 20px;
+}
+figure{
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+figure:hover{
+}
+/*--- iOS Landing Page Fix
+section {
+ 	position: relative;
+ 	width: 100%;
+ 	height: 100%;
+ 	display: table;
+}
+.home-wrap {
+ 	clip: rect(0, auto, auto, 0);
+ 	position: absolute;
+ 	top: 0;
+ 	left: 0;
+ 	width: 100%;
+ 	height: 100%;
+}
+#home {
+	background-image: url('img/mountains.jpeg');
+ 	position: fixed;
+ 	display: table;
+ 	top: 0;
+ 	left: 0;
+ 	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center center;
+	-webkit-transform: translateZ(0);
+          transform: translateZ(0);
+	will-change: transform;
+	z-index: -1;
+}
+.landing-text {
+	z-index: 100;
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}
+--*/
+
+/*--- iOS Fixed Image Fix
+figure {
+	position: relative;
+	width: 100%;
+	height: 60%;
+}
+.fixed-wrap {
+	clip: rect(0, auto, auto, 0);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+#fixed {
+	background-image: url('img/background.jpg');
+	position: fixed;
+	display: block;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center center;
+	-webkit-transform: translateZ(0);
+          transform: translateZ(0);
+	will-change: transform;
+}
+--*/
