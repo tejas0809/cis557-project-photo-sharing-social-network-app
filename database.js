@@ -11,7 +11,7 @@ const db = new sqlite3.Database(DB_NAME, (err) => {
     console.log('Connected to the SQLite database.');
 
     db.run(`CREATE TABLE posts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            post_id INTEGER PRIMARY KEY AUTOINCREMENT,
             photoUrl text,
             caption text UNIQUE,
             user_id INTEGER,
@@ -40,7 +40,7 @@ const db = new sqlite3.Database(DB_NAME, (err) => {
             password text NOT NULL,
             followers INTEGER DEFAULT 0,
             following INTEGER DEFAULT 0,
-            postnumber INETEGR DEFAULT 0,
+            postnumber INTEGER DEFAULT 0,
             CONSTRAINT email_unique UNIQUE (email)
             )`,
     (othererr) => {

@@ -21,7 +21,7 @@ webapp.listen(port, () => {
 // Other API endpoints
 webapp.get('/posts/:id', (req, res) => {
   console.log('READ all posts of a user');
-  const sql = 'select * from post where userid = ?';
+  const sql = 'select * from post where user_id = ?';
   const params = [req.params.id];
   db.get(sql, params, (err, rows) => {
     if (err) {
@@ -48,6 +48,22 @@ webapp.get('/users', (req, res) => {
     res.json({
       message: 'success',
       data: rows,
+    });
+  });
+});
+
+webapp.get('/user/:id', (req, res) => {
+  console.log('READ a student by id');
+  const sql = 'select * from users where user_id = ?';
+  const params = [req.params.id];
+  db.get(sql, params, (err, row) => {
+    if (err) {
+      res.status(404).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: row,
     });
   });
 });

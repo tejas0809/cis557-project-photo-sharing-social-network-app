@@ -15,6 +15,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="javascript/navshrink.js"></script>
+  <script src="javascript/loadProfile.js"></script>
+  <script src="javascript/jquery.session.js"></script>
+
   <link href="styles/style2.css" rel="stylesheet" />
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -60,7 +63,7 @@
 
     <div id="cover">
       <div class="landing-text">
-        <h1>Tejas Srivastava</h1>
+        <h1 id="fullName">Tejas Srivastava</h1>
         <h2>Put your Bio here</h2>
       </div>
     </div>
@@ -103,7 +106,7 @@
               <div class="card-body">
                 <span>
                   <a class="fa fa-user-circle" style="color:rgb(200,200,200); font-size=15px;"></a>
-                  @tejas0809
+                  <b id="username"></b>
                 </span>
                 <br />
                 <span>
