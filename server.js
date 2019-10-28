@@ -25,7 +25,9 @@ webapp.get('/posts/:id', (req, res) => {
   const params = [req.params.id];
   db.get(sql, params, (err, rows) => {
     if (err) {
-      res.status(404).json({ error: err.message });
+      res.status(404).json({
+        error: err.message
+      });
       return;
     }
     res.json({
@@ -42,7 +44,9 @@ webapp.get('/users', (req, res) => {
   const params = [];
   db.all(sql, params, (err, rows) => {
     if (err) {
-      res.status(404).json({ error: err.message });
+      res.status(404).json({
+        error: err.message
+      });
       return;
     }
     res.json({
@@ -53,12 +57,14 @@ webapp.get('/users', (req, res) => {
 });
 
 webapp.get('/user/:id', (req, res) => {
-  console.log('READ a student by id');
+  console.log('READ a user by id');
   const sql = 'select * from users where user_id = ?';
   const params = [req.params.id];
   db.get(sql, params, (err, row) => {
     if (err) {
-      res.status(404).json({ error: err.message });
+      res.status(404).json({
+        error: err.message
+      });
       return;
     }
     res.json({
@@ -68,11 +74,83 @@ webapp.get('/user/:id', (req, res) => {
   });
 });
 
+webapp.get('/user_login/:email', (req, res) => {
+  console.log('READ a user by email');
+  const sql = 'select * from users where email = ?';
+  const params = [req.body.email];
+  db.get(sql, params, (err, row) => {
+    if (err) {
+      res.status(404).json({
+        error: err.message
+      });
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: row,
+    });
+  });
+});
+
+webapp.post("/user_login", (req, res) => {
+  // alert("hello");
+  console.log('LOGGING in a user');
+  if (!req.body.email || !req.body.password) {
+    res.status(400).json({
+      error: 'missing email or password'
+    });
+    return;
+  }
+  // create student object
+  const newUser = {
+    // user_id: req.body.user_id,
+    // username: req.body.username,
+    // fname: req.body.fname,
+    // lname: req.body.lname,
+    email: req.body.email,
+    password: req.body.password,
+    // followers: req.body.followers,
+    // following: req.body.following,
+    // postcount: req.body.postcount
+  };
+
+
+  console.log(newUser);
+  //insert newStudent
+  const sql="select * from  users where email=? and password=?";
+  const values = [newUser.email, newUser.password];
+  // const insert = 'INSERT INTO users (username, fname, lname, email, password) VALUES (?,?,?,?,?)';
+  // const sql = 'INSERT INTO users (username, fname, lname, email, password) VALUES (?,?,?,?,?)';
+  // const values = [newUser.username, newUser.fname, newUser.lname, newUser.email, newUser.password];
+  db.get(sql, values, function(err, result) {
+    if (err) {
+      // console.log("errrrrrrr");
+      res.status(400).json({
+        error: err.message
+      });
+      return;
+    }
+    console.log("hhh"+result.fname+result.lname+result.username);
+    res.json({
+      message: 'success',
+      row:result,
+      user: newUser,
+      id: this.lastID,
+    });
+  });
+});
+
+
+
+
+
 webapp.post("/user_register", (req, res) => {
   // alert("hello");
   console.log('CREATING a new user');
   if (!req.body.username || !req.body.email || !req.body.fname || !req.body.lname || !req.body.password) {
-    res.status(400).json({ error: 'missing username or email or firstName or lastName or password' });
+    res.status(400).json({
+      error: 'missing username or email or firstName or lastName or password'
+    });
     return;
   }
   // create student object
@@ -92,10 +170,12 @@ webapp.post("/user_register", (req, res) => {
   const insert = 'INSERT INTO users (username, fname, lname, email, password) VALUES (?,?,?,?,?)';
   // const sql = 'INSERT INTO users (username, fname, lname, email, password) VALUES (?,?,?,?,?)';
   const values = [newUser.username, newUser.fname, newUser.lname, newUser.email, newUser.password];
-  db.run(insert, values, function (err, result) {
+  db.run(insert, values, function(err, result) {
     if (err) {
       console.log("errrrrrrr");
-      res.status(400).json({ error: err.message });
+      res.status(400).json({
+        error: err.message
+      });
       return;
     }
     res.json({
