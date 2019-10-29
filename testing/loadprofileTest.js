@@ -1,0 +1,1 @@
+const nPage = require('./loadProfile.js');
