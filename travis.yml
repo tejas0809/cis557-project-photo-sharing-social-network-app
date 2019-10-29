@@ -6,5 +6,7 @@ install:
   - yarn
   - npm install --save-dev jest
   - npm i jest-fetch-mock
+  - npm install express
+  - npm install body-parser
 script:
   - yarn test

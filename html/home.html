@@ -26,6 +26,8 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="registeration-form-validation.js"></script>
+    <script src="login_form_validation.js"></script>
 </head>
 
 
@@ -88,7 +90,7 @@
           <div class="tab-content">
             <!--Panel 7-->
             <div class="tab-pane fade in active" id="panel7" role="tabpanel">
-              <form method="POST" action="login">
+              <form method="POST" action="login" onSubmit="return loginformValidation();">
               <!--Body-->
               <div class="modal-body mb-1">
                 <div class="md-form form-sm mb-5">
@@ -122,7 +124,7 @@
             <div class="tab-pane fade" id="panel8" role="tabpanel">
 
               <!--Body-->
-              <form id="regform">
+              <form id="regform" onSubmit="return formValidation();">
               <div class="modal-body">
                 <div class="md-form form-sm mb-5">
                   <i class="fa fa-envelope prefix"></i>
