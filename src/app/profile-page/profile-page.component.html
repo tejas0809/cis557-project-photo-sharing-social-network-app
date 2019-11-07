@@ -1,0 +1,49 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false">
+    <!-- <mat-toolbar class="side-toolbar">
+
+      <br>
+      <div>
+        <img src='../../assets/images/bckg-an1.jpg' style='height:100%; width:100%; object-fit: contain;'>
+      </div>
+
+    </mat-toolbar> -->
+    <mat-nav-list>
+      <div>
+        <img src='../../assets/images/bckg-an2.jpg' alt='Cover Photo' class="cover-photo">
+      </div>
+
+      <img src='../../assets/images/bckg-an1.jpg' alt='Profile Photo' class="profile-photo">
+      <span class="profile-name">Nikhil Motwani</span>
+      <div class="profile-email">nmotwani@seas.upenn.edu</div>
+
+      <mat-divider></mat-divider>
+      <p mat-list-item class="prof-details">City, Country</p>
+      <p mat-list-item class="prof-details">Occupation</p>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="myprofile">My Profile</a>
+      <a mat-list-item routerLink="activityfeed">Activity Feed</a>
+      <!-- <a mat-list-item href="#">Link 3</a> -->
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <!-- <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>pixagram</span>
+    </mat-toolbar> -->
+    <!-- Add Content Here -->
+    <!-- <img src='../../assets/images/bckg-an1.jpg'> -->
+    <app-profile-header></app-profile-header>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

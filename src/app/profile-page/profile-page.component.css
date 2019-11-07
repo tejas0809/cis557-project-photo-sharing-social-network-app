@@ -1,0 +1,53 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 340px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.side-toolbar{
+  padding: 0;
+}
+
+.profile-photo{
+  position: relative;
+  top:-3em;
+  left:0.2em;
+  height:50%;
+  width:50%;
+  object-fit: contain;
+  border:2px solid white;
+}
+
+.cover-photo{
+  height:100%;
+  width:100%;
+  object-fit: contain;
+}
+
+.profile-name{
+  vertical-align: top;
+  margin-left: 1em;
+}
+
+.profile-email{
+  position: relative;
+  top:-50px;
+  margin-left: 0.2em;
+}
+
+.prof-details{
+  text-align: center;
+  margin: 0.4em;
+}

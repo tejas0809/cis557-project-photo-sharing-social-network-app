@@ -1,0 +1,71 @@
+.prof-cover-photo {
+  height: 15em;
+  width: 100%;
+  background-color: black;
+  overflow: hidden;
+}
+
+.cover-photo{
+  height:100%;
+  width:100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: black;
+}
+
+.box {
+  height: 7em;
+  width: 7em;
+
+  vertical-align: middle;
+}
+
+.show-num{
+  display: flex;
+  height: 80%;
+  border-radius: 45%;
+  align-items: center;
+  background-color: black;
+  color: white;
+  border:1px solid white;
+  box-shadow:0 4px 15px 0 rgba(255, 254, 254, 0.8);
+}
+
+span{
+  margin: auto;
+}
+
+.profile-stats{
+  background-color: black;
+  margin-top: 0;
+  text-align: center;
+  color: white;
+}
+
+mat-card{
+  width: 25%;
+  margin: 2em;
+}
+
+.flex-container-profile {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.bio {
+  position: relative;
+  top:-8em;
+  color: white;
+  margin: auto;
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+  font-size: 1.5vw;
+}

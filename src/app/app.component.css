@@ -1,0 +1,12 @@
+html{
+  height: 100%;
+  margin: 0;
+}
+
+main{
+  margin-top:0.1em;
+}
+
+.app-content{
+  min-height: 25em;
+}

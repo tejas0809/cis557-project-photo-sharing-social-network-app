@@ -1,0 +1,9 @@
+.fill-space {
+  flex: 1 1 auto;
+}
+
+a {
+  color:white;
+  text-decoration: none;
+  margin-right: 1em;
+}
