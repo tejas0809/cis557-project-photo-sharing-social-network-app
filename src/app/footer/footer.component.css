@@ -1,0 +1,13 @@
+.tool-height{
+  min-height: 12em;
+  width: 100%;
+}
+
+.content-center{
+  margin: 0 auto;
+  font-size: 0.8em;
+}
+
+.content-center p{
+  margin:0.5em;
+}

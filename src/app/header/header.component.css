@@ -1,0 +1,12 @@
+.fill-space {
+  flex: 1 1 auto;
+}
+
+.login-space{
+  margin-right: 1em;
+}
+
+a {
+  color:white;
+  text-decoration: none;
+}

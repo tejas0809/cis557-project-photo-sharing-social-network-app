@@ -1,0 +1,10 @@
+.loginForm{
+  width: 30%;
+  margin: 1em auto;
+  height: 25%;
+  background-color: red;
+}
+
+mat-form-field{
+  display: block;
+}

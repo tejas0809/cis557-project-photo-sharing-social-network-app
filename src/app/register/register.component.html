@@ -1,0 +1,61 @@
+<mat-card>
+<mat-horizontal-stepper labelPosition='bottom' #stepper>
+  <mat-step>
+    <form>
+      <ng-template matStepLabel>Fill out your login credentials</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Enter your Email" [formControl]="email" required>
+        <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+          <input matInput placeholder="Enter your Password" [type]="hide ? 'password' : 'text'" required>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      <button mat-button matStepperNext align='right'>
+        Next
+      </button>
+    </form>
+  </mat-step>
+
+  <mat-step optional>
+    <form>
+        <ng-template matStepLabel>Fill out your personal details</ng-template>
+        <mat-form-field>
+          <input matInput placeholder="First Name" required>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Last Name" required>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="City Name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <textarea matInput placeholder="Bio"></textarea>
+        </mat-form-field>
+        <div>
+            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperPrevious>Prev</button>
+        </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <div style='margin:auto; width:30%'>
+        <mat-checkbox>I have read the agree to the <span href='#'> Terms of Use </span> and <span href='#'>Privacy Policy</span></mat-checkbox>
+      <button mat-button color="accent" style='float:none' align='center'>Sign me Up</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+</mat-card>
