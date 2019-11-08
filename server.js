@@ -1,39 +1,36 @@
-var express = require('express');
-var app = express();
-var path = require('path');
-var http = require('http');
-var multer  = require('multer');
+const webapp = require('./backend/app');
+const http = require('http');
 
-app.use(function(req, res, next) { //allow cross origin requests
-  res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
-  res.header("Access-Control-Allow-Origin", "http://localhost");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+const normalizePort = (value) => {
+  var port = parseInt(value, 10);
 
-// run angular program in static client folder
-app.use(express.static(path.join(__dirname, 'client')));
-
-// start node server on port 8000
-// http://localhost:8000
-app.set('port', process.env.PORT || 8000);
-
-// use multer to upload file
-var storage = multer.diskStorage({
-  destination: './uploads/',
-  filename: function (req, file, cb) {
-    cb(null, file.originalname.replace(path.extname(file.originalname), "")  + path.extname(file.originalname))
+  if (isNaN(port)) {
+    // named pipe
+    return value;
   }
-})
 
-var upload = multer({ storage: storage })
+  if (port >= 0) {
+    // port number
+    return port;
+  }
 
-// create "uploadfile" API on server 
-app.post('/uploadfile', upload.single('file'), function(req,res,next){
-    console.log('Upload Successful ', req.file, req.body);
-});
+  return false;
+};
 
-// listen to port define above
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server port ' + app.get('port'));
-});
+const onError = error => {
+  console.log(error);
+};
+
+const onListening = () => {
+  const addr = server.address();
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
+  console.log("Listening on " + bind);
+};
+
+const port = normalizePort(process.env.PORT || "3000");
+webapp.set("port", port);
+
+const server = http.createServer(webapp);
+server.on("error", onError);
+server.on("listening", onListening);
+server.listen(port);
