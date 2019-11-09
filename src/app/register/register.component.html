@@ -1,61 +1,119 @@
 <mat-card>
 <mat-horizontal-stepper labelPosition='bottom' #stepper>
   <mat-step>
-    <form>
+    <form [formGroup]="userCredentials">
       <ng-template matStepLabel>Fill out your login credentials</ng-template>
+
       <mat-form-field>
-        <input matInput placeholder="Enter your Email" [formControl]="email" required>
-        <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+        <input matInput placeholder="Enter your Email" formControlName="email">
+        <mat-error *ngIf="'email.invalid'">{{ getEmailErrorMessage() }}</mat-error>
       </mat-form-field>
+
       <mat-form-field>
-          <input matInput placeholder="Enter your Password" [type]="hide ? 'password' : 'text'" required>
+          <input matInput placeholder="Enter your Password" [type]="hide ? 'password' : 'text'" formControlName="password">
           <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
               <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
-        </mat-form-field>
-      <button mat-button matStepperNext align='right'>
+          <mat-error *ngIf="'password.invalid'">{{ getPasswordErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+          <input matInput placeholder="Confirm Password" [type]="hide ? 'password' : 'text'" formControlName="confirmpassword" [errorStateMatcher]="matcher">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="userCredentials.hasError('notSame')">Passwords do not match</mat-error>
+      </mat-form-field>
+
+      <button type="button" mat-button matStepperNext align='right' class="nav-but">
         Next
       </button>
     </form>
   </mat-step>
 
-  <mat-step optional>
-    <form>
+  <mat-step>
+    <form [formGroup]="personalDetails">
         <ng-template matStepLabel>Fill out your personal details</ng-template>
+
         <mat-form-field>
-          <input matInput placeholder="First Name" required>
+          <input matInput placeholder="First Name" formControlName="fname">
+          <mat-error *ngIf="'fname.invalid'"> You must enter a First Name </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput placeholder="Last Name" required>
+            <input matInput placeholder="Last Name" formControlName="lname">
+            <mat-error *ngIf="'lname.invalid'"> You must enter a Last Name </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="dob">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput placeholder="City Name">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+
+              <mat-option value='male'>
+                Male
+              </mat-option>
+
+              <mat-option value='female'>
+                Female
+              </mat-option>
+
+              <mat-option value='other'>
+                  Other
+              </mat-option>
+
+            </mat-select>
+          </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Country Name" formControlName="country">
         </mat-form-field>
 
         <mat-form-field>
-          <textarea matInput placeholder="Bio"></textarea>
+          <input matInput placeholder="City Name" formControlName="city">
+        </mat-form-field>
+
+        <mat-form-field>
+          <textarea matInput placeholder="Bio" formControlName="bio"></textarea>
         </mat-form-field>
         <div>
-            <button mat-button matStepperNext>Next</button>
-            <button mat-button matStepperPrevious>Prev</button>
+            <button mat-button matStepperNext type='button' class="nav-but">Next</button>
+            <button mat-button matStepperPrevious type='button' class="nav-but">Prev</button>
         </div>
     </form>
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <div style='margin:auto; width:30%'>
-        <mat-checkbox>I have read the agree to the <span href='#'> Terms of Use </span> and <span href='#'>Privacy Policy</span></mat-checkbox>
-      <button mat-button color="accent" style='float:none' align='center'>Sign me Up</button>
-    </div>
+    <form [formGroup]="userPhotos">
+      <ng-template matStepLabel>Done</ng-template>
+      <div class='profile-img'>
+          <button mat-stroked-button type='button' (click)='profilefileUploader.click()'> Pick a Profile Image </button>
+          <input type='file' #profilefileUploader class="img-uploader" (change)="onSelectProfileImage($event)">
+      </div>
+
+      <div class="img-preview" *ngIf="profileImagePreview !== '' && profileImagePreview && userPhotos.get('profileimage').valid">
+          <img [src]="profileImagePreview" alt="Profile Photo">
+      </div>
+
+      <div class='profile-img'>
+          <button mat-stroked-button type='button' (click)='coverfileUploader.click()'> Pick a Cover Image </button>
+          <input type='file' #coverfileUploader class="img-uploader" (change)="onSelectCoverImage($event)">
+      </div>
+
+      <div class="img-preview" *ngIf="coverImagePreview !== '' && coverImagePreview && userPhotos.get('coverimage').valid">
+          <img [src]="coverImagePreview" alt="Cover Photo">
+      </div>
+    </form>
+      <div style='margin:auto; width:30%'>
+        <mat-checkbox [(ngModel)]="disabled">I have read the agree to the <span href='#'> Terms of Use </span> and <span href='#'>Privacy Policy</span></mat-checkbox>
+        <button mat-button color="accent" style='float:none' align='center' type='submit' [disabled]='!disabled' (click)="submitForm()">Sign me Up</button>
+      </div>
+
   </mat-step>
 </mat-horizontal-stepper>
 </mat-card>

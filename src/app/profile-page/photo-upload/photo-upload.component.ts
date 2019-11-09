@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./photo-upload.component.css']
 })
 
-export class HomeComponent {
+export class PhotoUploadComponent {
 
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import { NgForm } from "@angular/forms";
+import { UsersAuthService } from '../profile-page/user-list/usersauth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -8,28 +10,15 @@ import {FormControl, Validators} from '@angular/forms';
 })
 
 export class LoginComponent {
-  email = new FormControl('', [Validators.required, Validators.email]);
   hide = true;
 
-  getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a email' :
-        this.email.hasError('email') ? 'Not a valid email' :
-            '';
+  constructor(public authUserService: UsersAuthService) {}
+
+  onLogin(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+    console.log('Logged In');
+    this.authUserService.login(form.value.email, form.value.password);
   }
-
-  // password = new FormControl('', [Validators.required, Validators.compose(
-  //   [
-  //     Validators.minLength(5),
-  //     Validators.required,
-  //     Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')
-  //   ]
-  //   )]);
-
-  // getPasswordErrorMessage(){
-  //   return this.password.hasError('required') ? 'You must enter a password' :
-  //       this.password.hasError('minLength') ? 'Password should be of 5 minimum character' :
-  //           '';
-  // }
-
-
 }

@@ -15,7 +15,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSidenavModule} from '@angular/material/sidenav';
-
+import {MatSelectModule} from '@angular/material/select';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,6 +31,8 @@ import { MatListModule } from '@angular/material/list';
 import { ProfileComponent } from './profile-page/profile/profile.component';
 import { ActivityFeedComponent } from './profile-page/activity-feed/activity-feed.component';
 import { ProfileHeaderComponent } from './profile-page/profile-header/profile-header.component';
+import { PhotoUploadComponent } from './profile-page/photo-upload/photo-upload.component';
+import { UsersAuthService } from './profile-page/user-list/usersauth.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,8 @@ import { ProfileHeaderComponent } from './profile-page/profile-header/profile-he
     ProfilePageComponent,
     ProfileComponent,
     ActivityFeedComponent,
-    ProfileHeaderComponent
+    ProfileHeaderComponent,
+    PhotoUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -64,9 +68,11 @@ import { ProfileHeaderComponent } from './profile-page/profile-header/profile-he
     MatCheckboxModule,
     MatSidenavModule,
     LayoutModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [UsersAuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
