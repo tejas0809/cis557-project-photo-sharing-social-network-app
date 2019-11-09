@@ -3,6 +3,6 @@
   <span [routerLink]="['/']" > PixaGram</span>
   <span class='fill-space'></span>
 
-  <a class='login-space' [routerLink]="['/login']">Login</a>
-  <a [routerLink]="['/register']">Register</a>
+  <a mat-button class='login-space' routerLink='/login' routerLinkActive="mat-accent" >Login</a>
+  <a mat-button routerLink='/register' routerLinkActive="mat-accent" >Register</a>
 </mat-toolbar>

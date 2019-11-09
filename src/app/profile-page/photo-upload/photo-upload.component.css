@@ -1,0 +1,26 @@
+mat-card{
+  width: 70%;
+  margin: 2em auto;
+}
+
+.img-preview{
+  height: 18em;
+  margin: 2em auto;
+  width: 35%;
+  background-color: red;
+}
+
+.img-uploader{
+  display: none;
+}
+
+mat-card-content .photo-img{
+  text-align: center;
+  margin: 2em auto;
+}
+
+.img-caption {
+  margin: auto;
+  width: 70%;
+  display: block;
+}
