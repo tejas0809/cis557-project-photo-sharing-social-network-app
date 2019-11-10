@@ -78,9 +78,6 @@ export class RegisterComponent implements OnInit {
     this.userPhotos = new FormGroup({
       profileimage: new FormControl(null, {
         validators: []
-      }),
-      coverimage: new FormControl(null, {
-        validators: []
       })
     });
   }

@@ -100,14 +100,6 @@
           <img [src]="profileImagePreview" alt="Profile Photo">
       </div>
 
-      <div class='profile-img'>
-          <button mat-stroked-button type='button' (click)='coverfileUploader.click()'> Pick a Cover Image </button>
-          <input type='file' #coverfileUploader class="img-uploader" (change)="onSelectCoverImage($event)">
-      </div>
-
-      <div class="img-preview" *ngIf="coverImagePreview !== '' && coverImagePreview && userPhotos.get('coverimage').valid">
-          <img [src]="coverImagePreview" alt="Cover Photo">
-      </div>
     </form>
       <div style='margin:auto; width:30%'>
         <mat-checkbox [(ngModel)]="disabled">I have read the agree to the <span href='#'> Terms of Use </span> and <span href='#'>Privacy Policy</span></mat-checkbox>
