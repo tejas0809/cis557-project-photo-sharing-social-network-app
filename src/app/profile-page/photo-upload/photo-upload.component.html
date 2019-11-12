@@ -5,20 +5,22 @@
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
+      <form [formGroup] = 'userPhotos'>
         <div class='photo-img'>
               <button mat-stroked-button type='button' (click)='fileUploader.click()'> Pick an Image </button>
-              <input type='file' #fileUploader class="img-uploader">
+              <input type='file' #fileUploader class="img-uploader" (change)="onSelectImage($event)">
         </div>
 
-        <div class="img-preview">
-          <img alt="Profile Photo">
+        <div class="img-preview" *ngIf="ImagePreview !=='' && ImagePreview && userPhotos.get('image').valid">
+          <img [src]="ImagePreview" alt="Photo">
         </div>
 
-        <mat-form-field class="img-caption">
-          <textarea matInput rows='4' placeholder="Add Image Caption"></textarea>
+        <mat-form-field class="img-caption" *ngIf="showContent">
+          <textarea matInput rows="4" formControlName="caption" placeholder="Add Image Caption" ></textarea>
         </mat-form-field>
+      </form>
     </mat-card-content>
     <mat-card-actions align='center'>
-        <button mat-raised-button color="accent">Upload Image</button>
+        <button mat-raised-button color="accent" *ngIf="showContent" type='submit' (click)="uploadImage()">Upload Image</button>
     </mat-card-actions>
 </mat-card>

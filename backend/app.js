@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
@@ -9,6 +10,7 @@ webapp.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
 webapp.use(bodyParser.json());
+webapp.use('/images', express.static(path.join('backend/images')));
 
 webapp.use((req, res, next) => {
   // console.log('midle:'+JSON.stringify(req.body));

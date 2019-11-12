@@ -89,7 +89,8 @@
   </mat-step>
 
   <mat-step>
-    <form [formGroup]="userPhotos">
+      <ng-template matStepLabel>Done</ng-template>
+    <!-- <form [formGroup]="userPhotos">
       <ng-template matStepLabel>Done</ng-template>
       <div class='profile-img'>
           <button mat-stroked-button type='button' (click)='profilefileUploader.click()'> Pick a Profile Image </button>
@@ -100,7 +101,7 @@
           <img [src]="profileImagePreview" alt="Profile Photo">
       </div>
 
-    </form>
+    </form> -->
       <div style='margin:auto; width:30%'>
         <mat-checkbox [(ngModel)]="disabled">I have read the agree to the <span href='#'> Terms of Use </span> and <span href='#'>Privacy Policy</span></mat-checkbox>
         <button mat-button color="accent" style='float:none' align='center' type='submit' [disabled]='!disabled' (click)="submitForm()">Sign me Up</button>

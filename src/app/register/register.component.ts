@@ -14,11 +14,11 @@ export class RegisterComponent implements OnInit {
   // Three Form Groups for each register step
   userCredentials: FormGroup;
   personalDetails: FormGroup;
-  userPhotos: FormGroup;
+  // userPhotos: FormGroup;
 
   // To create image preview of profile and cover photo
-  profileImagePreview: string;
-  coverImagePreview: string;
+  // profileImagePreview: string;
+  // coverImagePreview: string;
 
   // Password requirements parameters
   minPasswordLength = 5;
@@ -75,34 +75,31 @@ export class RegisterComponent implements OnInit {
       })
     });
 
-    this.userPhotos = new FormGroup({
-      profileimage: new FormControl(null, {
-        validators: []
-      })
-    });
+    // this.userPhotos = new FormGroup({
+    // });
   }
 
-  onSelectProfileImage(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.userPhotos.patchValue({ profileimage: file });
-    this.userPhotos.get('profileimage').updateValueAndValidity();
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profileImagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
+  // onSelectProfileImage(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files[0];
+  //   this.userPhotos.patchValue({ profileimage: file });
+  //   this.userPhotos.get('profileimage').updateValueAndValidity();
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.profileImagePreview = reader.result as string;
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
 
-  onSelectCoverImage(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.userPhotos.patchValue({ coverimage: file });
-    this.userPhotos.get('coverimage').updateValueAndValidity();
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.coverImagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
+  // onSelectCoverImage(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files[0];
+  //   this.userPhotos.patchValue({ coverimage: file });
+  //   this.userPhotos.get('coverimage').updateValueAndValidity();
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.coverImagePreview = reader.result as string;
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
 
   checkPassword(group: FormGroup) {
 
@@ -128,14 +125,14 @@ export class RegisterComponent implements OnInit {
   }
 
   submitForm() {
-    if (this.userCredentials.invalid || this.personalDetails.invalid || this.userPhotos.invalid) {
+    if (this.userCredentials.invalid || this.personalDetails.invalid) {
       return;
     }
 
     this.authUserService.createUser(this.userCredentials.value.email, this.userCredentials.value.password,
       this.personalDetails.value.fname, this.personalDetails.value.lname, this.personalDetails.value.dob,
       this.personalDetails.value.gender, this.personalDetails.value.country, this.personalDetails.value.city,
-      this.personalDetails.value.bio, this.userPhotos.value.profileimage, this.userPhotos.value.coverimage);
+      this.personalDetails.value.bio);
 
     console.log('submitted');
   }

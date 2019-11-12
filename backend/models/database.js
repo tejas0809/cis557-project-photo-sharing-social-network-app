@@ -38,12 +38,12 @@ const db = new sqlite3.Database(DB_NAME, (err) => {
     });
 
     db.run(`CREATE TABLE posts (
-            post_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            photoUrl text,
-            caption text UNIQUE,
-            user_id INTEGER,
-            FOREIGN KEY (user_id)
-              REFERENCES users (user_id)
+            postId INTEGER PRIMARY KEY AUTOINCREMENT,
+            imagePath text NOT NULL,
+            caption text,
+            email text NOT NULL,
+            FOREIGN KEY (email)
+              REFERENCES users (email)
               ON UPDATE CASCADE
               ON DELETE CASCADE
             )`,

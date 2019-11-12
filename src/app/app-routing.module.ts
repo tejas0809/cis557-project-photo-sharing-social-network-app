@@ -9,6 +9,7 @@ import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { ProfileComponent } from './profile-page/profile/profile.component';
 import { ActivityFeedComponent } from './profile-page/activity-feed/activity-feed.component';
 import { PhotoUploadComponent } from './profile-page/photo-upload/photo-upload.component';
+import { UserAuthGuard } from './profile-page/user-list/userauth.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -22,21 +23,25 @@ const routes: Routes = [
       },
       {
         path: 'myprofile',
-        component: ProfileComponent
+        component: ProfileComponent,
+        canActivate: [UserAuthGuard]
       },
       {
         path: 'activityfeed',
-        component: ActivityFeedComponent
+        component: ActivityFeedComponent,
+        canActivate: [UserAuthGuard]
       },
       {
         path: 'photoUpload',
-        component: PhotoUploadComponent
+        component: PhotoUploadComponent,
+        canActivate: [UserAuthGuard]
       }
   ]},
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [UserAuthGuard]
 })
 export class AppRoutingModule { }

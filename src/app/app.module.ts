@@ -33,6 +33,8 @@ import { ActivityFeedComponent } from './profile-page/activity-feed/activity-fee
 import { ProfileHeaderComponent } from './profile-page/profile-header/profile-header.component';
 import { PhotoUploadComponent } from './profile-page/photo-upload/photo-upload.component';
 import { UsersAuthService } from './profile-page/user-list/usersauth.service';
+import { UsersService } from './profile-page/user-list/users.service';
+import { PhotosService } from './profile-page/photo-upload/photo.service';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,7 @@ import { UsersAuthService } from './profile-page/user-list/usersauth.service';
     MatSelectModule,
     HttpClientModule
   ],
-  providers: [UsersAuthService],
+  providers: [UsersAuthService, UsersService, PhotosService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
