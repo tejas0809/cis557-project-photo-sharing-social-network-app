@@ -54,6 +54,46 @@ const db = new sqlite3.Database(DB_NAME, (err) => {
         console.log("posts table ");
       }
     });
+
+    db.run(`CREATE TABLE likes (
+      postId INTEGER,
+      email text NOT NULL,
+      FOREIGN KEY (postId)
+        REFERENCES posts (postId)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+      FOREIGN KEY (email)
+        REFERENCES users (email)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+      )`,
+    (othererr) => {
+    if (othererr) {
+      console.error(othererr.message);
+    } else {
+      console.log("likes table ");
+    }
+    });
+
+    db.run(`CREATE TABLE follow (
+      user1 text NOT NULL,
+      user2 text NOT NULL,
+      FOREIGN KEY (user1)
+      REFERENCES users (email)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE,
+      FOREIGN KEY (user2)
+      REFERENCES users (email)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE
+      )`,
+    (othererr) => {
+    if (othererr) {
+      console.error(othererr.message);
+    } else {
+      console.log("follow table ");
+    }
+    });
   }
 });
 
