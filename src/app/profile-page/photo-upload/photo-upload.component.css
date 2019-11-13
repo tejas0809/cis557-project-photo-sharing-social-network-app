@@ -9,6 +9,12 @@ mat-card{
   width: 35%;
 }
 
+.img-preview img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .img-uploader{
   display: none;
 }
