@@ -158,13 +158,13 @@ router.post('/follow',
     }
     res.json({
       message: 'success',
-      post: userPost,
-      id: this.lastID,
+      follow: follow,
+      
     });
   });
 });
 
-router.delete('unfollow',
+router.delete('/unfollow',
 (req, res) => {
   const url = req.protocol + '://' + req.get("host");
 
@@ -184,8 +184,7 @@ router.delete('unfollow',
     }
     res.json({
       message: 'success',
-      post: userPost,
-      id: this.lastID,
+      follow: follow,
     });
   });
 });

@@ -95,7 +95,7 @@ router.post('/like/user:email',
     res.json({
       message: 'success',
       post: userPost,
-      id: this.lastID,
+      
     });
   });
 });
@@ -120,7 +120,7 @@ router.delete('/unlike/user:email',
     res.json({
       message: 'success',
       post: userPost,
-      id: this.lastID,
+      
     });
   });
 });
