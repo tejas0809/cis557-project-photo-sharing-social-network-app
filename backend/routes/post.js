@@ -71,8 +71,58 @@ multer({storage: storage}).single('image'),
       id: this.lastID,
     });
   });
-
 });
 
+router.post('/like/user:email',
+(req, res) => {
+  // console.log(req.body.postId);
+  // console.log(req.params.email);
+
+  const userPost = {
+    postId: req.body.postId,
+    email: req.params.email
+  };
+
+  const insert = 'INSERT INTO likes (postId, email) VALUES (?,?)';
+  const values = [userPost.postId, userPost.email];
+
+  db.run(insert, values, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ message: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      post: userPost,
+      id: this.lastID,
+    });
+  });
+});
+
+router.delete('/unlike/user:email',
+(req, res) => {
+
+  const userPost = {
+    postId: req.body.postId,
+    email: req.params.email
+  };
+
+  const sqlDelete = 'Delete from likes where postId = ? and email = ?';
+  const values = [userPost.postId, userPost.email];
+
+  db.run(sqlDelete, values, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ message: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      post: userPost,
+      id: this.lastID,
+    });
+  });
+});
 
 module.exports = router;

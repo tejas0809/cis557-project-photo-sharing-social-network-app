@@ -138,4 +138,56 @@ router.post('/login', (req, res) => {
 
 });
 
+router.post('/follow',
+(req, res) => {
+  const url = req.protocol + '://' + req.get("host");
+
+  const follow = {
+    user1: req.body.user1,
+    user2: req.body.user2
+  };
+
+  const insert = 'INSERT INTO follow (user1, user2) VALUES (?,?)';
+  const values = [follow.user1, follow.user2];
+
+  db.run(insert, values, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ message: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      post: userPost,
+      id: this.lastID,
+    });
+  });
+});
+
+router.delete('unfollow',
+(req, res) => {
+  const url = req.protocol + '://' + req.get("host");
+
+  const follow = {
+    user1: req.body.user1,
+    user2: req.body.user2
+  };
+
+  const sqlDelete = 'Delete from follow where user1 = ? and user2 = ?';
+  const values = [follow.user1, follow.user2];
+
+  db.run(sqlDelete, values, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ message: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      post: userPost,
+      id: this.lastID,
+    });
+  });
+});
+
 module.exports = router;
