@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const db = require('../models/database');
+//const db = require('../models/database');
+const db = require('../models/database1');
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -28,11 +29,17 @@ const storage = multer.diskStorage({
   }
 });
 
-router.get('/user:email', (req, res) => {
-  const sql = 'select * from posts where email = ?';
+router.get('/user/:email', (req, res) => f1(req,res));
+
+router.post('/user/:email', multer({storage: storage}).single('image'), (req, res) => f2(req,res));
+
+
+function f1(req, res) {
+  const sql = 'select * from Post where userEmail = ?';
   const params = [req.params.email];
 
-  db.all(sql, params, (err, rows) => {
+  //db.all(sql, params, (err, rows) => {
+    db.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -42,12 +49,9 @@ router.get('/user:email', (req, res) => {
       photos: rows,
     });
   });
+}
 
-});
-
-router.post('/user:email',
-multer({storage: storage}).single('image'),
-(req, res) => {
+function f2(req, res) {
   const url = req.protocol + '://' + req.get("host");
 
   const newPhoto = {
@@ -55,11 +59,13 @@ multer({storage: storage}).single('image'),
     caption: req.body.caption,
     email: req.params.email
   }
+  
+  console.log(newPhoto);
 
-  const insert = 'INSERT INTO posts (imagePath, caption, email) VALUES (?,?,?)';
+  const insert = 'INSERT INTO Post (imagePath, caption, userEmail) VALUES (?,?,?)';
   const values = [newPhoto.imagePath, newPhoto.caption, newPhoto.email];
 
-  db.run(insert, values, function (err, result) {
+  db.query(insert, values, function (err, result) {
     if (err) {
       console.log(err);
       res.status(400).json({ message: err.message });
@@ -71,58 +77,6 @@ multer({storage: storage}).single('image'),
       id: this.lastID,
     });
   });
-});
-
-router.post('/like/user:email',
-(req, res) => {
-  // console.log(req.body.postId);
-  // console.log(req.params.email);
-
-  const userPost = {
-    postId: req.body.postId,
-    email: req.params.email
-  };
-
-  const insert = 'INSERT INTO likes (postId, email) VALUES (?,?)';
-  const values = [userPost.postId, userPost.email];
-
-  db.run(insert, values, function (err, result) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ message: err.message });
-      return;
-    }
-    res.json({
-      message: 'success',
-      post: userPost,
-      
-    });
-  });
-});
-
-router.delete('/unlike/user:email',
-(req, res) => {
-
-  const userPost = {
-    postId: req.body.postId,
-    email: req.params.email
-  };
-
-  const sqlDelete = 'Delete from likes where postId = ? and email = ?';
-  const values = [userPost.postId, userPost.email];
-
-  db.run(sqlDelete, values, function (err, result) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ message: err.message });
-      return;
-    }
-    res.json({
-      message: 'success',
-      post: userPost,
-      
-    });
-  });
-});
+}
 
 module.exports = router;

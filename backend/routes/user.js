@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const db = require('../models/database');
+//const db = require('../models/database');
+const db = require('../models/database1');
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 
@@ -46,13 +47,16 @@ const storage = multer.diskStorage({
 //   });
 // });
 
+router.get('/:email', (req, res) => f1(req, res));
+router.post('/signup', (req, res) => f2(req,res));
+router.post('/login', (req, res) => f3(req,res));
 
-
-router.get('/:email', (req, res) => {
+function f1 (req, res)  {
   console.log('READ a student by id');
-  const sql = 'select * from users where email = ?';
+  const sql = 'select * from User where email = ?';
   const params = [req.params.email];
-  db.get(sql, params, (err, row) => {
+  //db.get(sql, params, (err, row) => {
+    db.query(sql, params, (err, row) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -62,10 +66,9 @@ router.get('/:email', (req, res) => {
       user: row,
     });
   });
-});
+}
 
-router.post('/signup',
-(req, res) => {
+function f2 (req, res) {
   // console.log(req);
   console.log(req.headers);
   console.log('hello');
@@ -86,10 +89,11 @@ router.post('/signup',
         bio: req.body.bio
      };
 
-     const insert = 'INSERT INTO users (email, password, fname, lname, dob, gender, country, city, bio) VALUES (?,?,?,?,?,?,?,?,?)';
+     const insert = 'INSERT INTO User (email, pswd, fname, lname, dob, gender, country, city, bio) VALUES (?,?,?,?,?,?,?,?,?)';
      const values = [newUser.email, password, newUser.fname, newUser.lname, newUser.dob, newUser.gender, newUser.country, newUser.city, newUser.bio ];
 
-      db.run(insert, values, function (err, result) {
+      //db.run(insert, values, function (err, result) {
+        db.query(insert, values, function (err, result) {
         if (err) {
           console.log('1'+err.message);
           res.status(400).json({ message: err.message });
@@ -101,92 +105,78 @@ router.post('/signup',
         });
       });
   });
-});
+}
 
-router.post('/login', (req, res) => {
-  const sql = 'select * from users where email = ?';
-  const params = [req.body.email];
+function f3(req, res) {
+  const sql = 'select * from User where email = ?';
+  const params = [req.body.email, req.body.password];
 
-  db.get(sql, params, (err, row) => {
+  //db.get(sql, params, (err, row) => {
+    db.query(sql, params, (err, row) => {
     if (err) {
-      res.status(401).json({ error: 'Authentication Failed' });
+      res.status(401).json({ error: 'err: Authentication Failed' });
       return;
     }
-    result = bcrypt.compare(req.body.password, row.password);
 
-    if(!result){
-      return result.status(401).json({
-        message: 'Auth Failed'
-      });
-    }
+    console.log(req.body);
+    console.log(row[0].pswd);
 
-    const email = row.email;
+    const email = row[0].email;
+    console.log(email);
 
-    const token = jwt.sign(
-      { email: email },
-      'cis_557_programming_for_the_web_longer_secret_password',
-      {expiresIn: '1h'}
-    );
-
-    res.status(200).json({
-      token:token,
-      expiresIn: 3600,
-      email: email
+    bcrypt.compare(req.body.password, row[0].pswd, function(err, result) {
+      if (err){
+        // handle error
+        return res.status(401).json({ error: 'Authentication Failed' });
+      }
+      if (result)
+      {
+        
+        // Send JWT
+        const token = jwt.sign(
+          { email: email },
+          'cis_557_programming_for_the_web_longer_secret_password',
+          {expiresIn: '1h'}
+        );
+    
+        return res.status(200).json({
+          token:token,
+          expiresIn: 3600,
+          email: email
+        });
+      } 
+      else {
+        // response is OutgoingMessage object that server response http request
+        return res.status(401).json({
+          message: 'Auth Failed'
+        });
+      }
     });
+    
+    // result = bcrypt.compare(req.body.password, row.password);
+
+    // if(!result){
+    //   return res.status(401).json({
+    //     message: 'Auth Failed'
+    //   });
+    // }
+
+    // const email = row.email;
+
+    // const token = jwt.sign(
+    //   { email: email },
+    //   'cis_557_programming_for_the_web_longer_secret_password',
+    //   {expiresIn: '1h'}
+    // );
+
+    // res.status(200).json({
+    //   token:token,
+    //   expiresIn: 3600,
+    //   email: email
+    // });
 
   });
 
-});
-
-router.post('/follow',
-(req, res) => {
-  const url = req.protocol + '://' + req.get("host");
-
-  const follow = {
-    user1: req.body.user1,
-    user2: req.body.user2
-  };
-
-  const insert = 'INSERT INTO follow (user1, user2) VALUES (?,?)';
-  const values = [follow.user1, follow.user2];
-
-  db.run(insert, values, function (err, result) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ message: err.message });
-      return;
-    }
-    res.json({
-      message: 'success',
-      follow: follow,
-      
-    });
-  });
-});
-
-router.delete('/unfollow',
-(req, res) => {
-  const url = req.protocol + '://' + req.get("host");
-
-  const follow = {
-    user1: req.body.user1,
-    user2: req.body.user2
-  };
-
-  const sqlDelete = 'Delete from follow where user1 = ? and user2 = ?';
-  const values = [follow.user1, follow.user2];
-
-  db.run(sqlDelete, values, function (err, result) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ message: err.message });
-      return;
-    }
-    res.json({
-      message: 'success',
-      follow: follow,
-    });
-  });
-});
+}
 
 module.exports = router;
