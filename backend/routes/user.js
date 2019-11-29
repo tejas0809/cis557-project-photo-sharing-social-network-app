@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 //const db = require('../models/database');
-const db = require('../models/database1');
+const db = require('../models/database');
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 
@@ -46,13 +46,39 @@ const storage = multer.diskStorage({
 //     });
 //   });
 // });
+router.get('/', (req, res) => getAllUsers(req,res));
+router.get('/following:email',(req,res) => getFollowing(req,res));
+router.get('/followers:email',(req,res) => getFollowers(req,res));
+router.get('/followerCount:email',(req,res) => getFollowerCount(req,res));
+router.get('/activityFeed/:email',(req,res) => getActivityFeedPosts(req,res));
+router.get('/:email', (req, res) => getUser(req, res));
+router.post('/signup', (req, res) => signupNewUser(req,res));
+router.post('/login', (req, res) => loginUser(req,res));
+router.post('/follow', (req,res)=> followUser(req,res));
+router.delete('/unfollow',(req, res) => unfollowUser(req,res));
 
-router.get('/:email', (req, res) => f1(req, res));
-router.post('/signup', (req, res) => f2(req,res));
-router.post('/login', (req, res) => f3(req,res));
 
-function f1 (req, res)  {
-  console.log('READ a student by id');
+
+
+function getAllUsers(req,res) {
+  console.log('READ all users');
+  const sql = 'select * from User';
+  const params = [];
+  db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(201).json({
+      message: 'success',
+      users: rows,
+    });
+  });
+}
+
+
+function  getUser(req, res)  {
+  console.log('READ a user by email');
   const sql = 'select * from User where email = ?';
   const params = [req.params.email];
   //db.get(sql, params, (err, row) => {
@@ -61,6 +87,12 @@ function f1 (req, res)  {
       res.status(404).json({ message: err.message });
       return;
     }
+    if(row.length==0){
+      return res.status(401).json({
+        message: 'No user found!'
+      })
+    }
+
     res.json({
       message: 'success',
       user: row,
@@ -68,10 +100,10 @@ function f1 (req, res)  {
   });
 }
 
-function f2 (req, res) {
+function signupNewUser(req, res) {
   // console.log(req);
-  console.log(req.headers);
-  console.log('hello');
+  // console.log(req.headers);
+  console.log('Signing up new user');
   console.log(req.body);
   // console.log(req.file);
 
@@ -95,7 +127,12 @@ function f2 (req, res) {
       //db.run(insert, values, function (err, result) {
         db.query(insert, values, function (err, result) {
         if (err) {
-          console.log('1'+err.message);
+          console.log(err.message);
+          if(err.message.includes("ER_DUP_ENTRY")){
+            res.status(400).json({message:'User Already Exists! Select new email or login with existing one!'});
+            return;
+
+          }
           res.status(400).json({ message: err.message });
           return;
         }
@@ -107,7 +144,55 @@ function f2 (req, res) {
   });
 }
 
-function f3(req, res) {
+function unfollowUser(req,res){
+  const follow = {
+    user1: req.body.user1,
+    user2: req.body.user2
+  };
+  console.log("User unfollowing another user");
+  const sqlDelete = 'Delete from Follows where email1 = ? and email2 = ?';
+  const values = [follow.user1, follow.user2];
+
+  db.query(sqlDelete, values, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ message: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      follow: follow,
+    });
+  });
+}
+
+function followUser(req,res) {
+  const follow = {
+    user1: req.body.user1,
+    user2: req.body.user2
+  };
+
+  const insert = 'INSERT INTO Follows (email1, email2) VALUES (?,?)';
+  const values = [follow.user1, follow.user2];
+  console.log("user following another user")
+  db.query(insert, values, function (err, result) {
+    if (err) {
+      if(err.message.includes("ER_DUP_ENTRY")){
+        res.status(400).json({message:'Already Following !'});
+        return;
+      }
+      console.log(err);
+      res.status(400).json({ message: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      follow: follow,
+    });
+  });
+}
+
+function loginUser(req, res) {
   const sql = 'select * from User where email = ?';
   const params = [req.body.email, req.body.password];
 
@@ -119,6 +204,12 @@ function f3(req, res) {
     }
 
     console.log(req.body);
+    if (row.length == 0) {
+      return res.status(401).json({
+        message: 'No User Found!'
+      });
+    }
+    
     console.log(row[0].pswd);
 
     const email = row[0].email;
@@ -179,4 +270,80 @@ function f3(req, res) {
 
 }
 
+
+
+function getFollowers(req, res) {
+  console.log("Get all followers of a user");
+  const sql = 'select User.email,User.fname, User.lname, User.bio, User.profileimagePath from Follows inner join User on User.email=Follows.email1 where Follows.email2 = ?';
+  const params = [req.params.email];
+
+  //db.all(sql, params, (err, rows) => {
+    db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(200).json({
+      message: 'success',
+      followers: rows,
+    });
+  });
+}
+
+
+function getFollowerCount(req, res) {
+  console.log("Get no of followers of a user");
+  const sql = 'select count(*) as count1 from Follows where email2 = ?';
+  const params = [req.params.email];
+
+  //db.all(sql, params, (err, rows) => {
+    db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(200).json({
+      message: 'success',
+      followerCount: rows[0].count1,
+    });
+  });
+}
+
+
+function getFollowing(req, res) {
+  console.log("Get all the users which the current user is following");
+  const sql = 'select User.email,User.fname, User.lname, User.bio, User.profileimagePath from Follows inner join User on User.email=Follows.email2 where Follows.email1 = ?';
+  const params = [req.params.email];
+
+  //db.all(sql, params, (err, rows) => {
+    db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(200).json({
+      message: 'success',
+      following: rows,
+    });
+  });
+}
+
+
+function getActivityFeedPosts(req,res){
+  console.log("getting posts of the people the current user is following in chronological order");
+  const sql='select Post.id,Post.postTimestamp,Post.imagePath, Post.caption, Post.userEmail, User.fname, User.lname, User.profileimagePath from Post inner join Follows on Post.userEmail=Follows.email2 inner join User on User.email=Follows.email2 where Follows.email1 = ? order by Post.postTimestamp';
+  const params = [req.params.email];
+
+  //db.all(sql, params, (err, rows) => {
+    db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(200).json({
+      message: 'success',
+      posts: rows,
+    });
+  });
+}
 module.exports = router;
