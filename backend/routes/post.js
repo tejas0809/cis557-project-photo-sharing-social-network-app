@@ -29,11 +29,11 @@ const storage = multer.diskStorage({
 });
 
 
-router.get('/:email', (req,res) => getPost(req,res));
+router.get('/:id', (req,res) => getPost(req,res));
 router.get('/user/:email', (req, res) => getPostsOfUser(req,res));
 router.post('/user/:email', multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
-router.post('/like:id' , (req,res) => likePost(req,res));
-router.delete('/unlike:id',(req,res) => unlikePost(req,res));
+router.post('/like/:id' , (req,res) => likePost(req,res));
+router.delete('/unlike/:id&:email',(req,res) => unlikePost(req,res));
 
 
 function getPostsOfUser(req, res) {
@@ -46,6 +46,7 @@ function getPostsOfUser(req, res) {
       res.status(404).json({ message: err.message });
       return;
     }
+
     res.status(200).json({
       message: 'success',
       photos: rows,
@@ -105,6 +106,7 @@ function getPost(req,res) {
 
 function likePost(req,res){
   console.log("like a post");
+
   const values=[req.body.email,req.params.id];
   const sql="insert into Likes (email, postId) values (?,?)";
   db.query(sql,values,function(err,result){
@@ -114,15 +116,14 @@ function likePost(req,res){
       return;
     }
     res.json({
-      message:'success',
-      postlike:values
+      message:'success'
     })
   })
 }
 
 function unlikePost(req,res){
   console.log("unlike a post");
-  const values=[req.body.email,req.params.id];
+  const values=[req.params.email,req.params.id];
   const sql="delete from Likes where email=? and postId=?";
   db.query(sql,values,function(err,result){
     if(err){
@@ -131,8 +132,7 @@ function unlikePost(req,res){
       return;
     }
     res.json({
-      message:'success',
-      postunlike:values
+      message:'success'
     })
   })
 }

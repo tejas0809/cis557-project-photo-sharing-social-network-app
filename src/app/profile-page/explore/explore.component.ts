@@ -3,6 +3,7 @@ import { User } from '../user-list/user.model';
 import { UsersAuthService } from '../user-list/usersauth.service';
 import { UsersService } from '../user-list/users.service';
 import { Subscription } from 'rxjs';
+import { FollowingService } from '../following/following.service';
 
 @Component({
   selector: 'app-explore',
@@ -10,14 +11,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./explore.component.css']
 })
 
-export class ExploreComponent implements OnInit{
+export class ExploreComponent implements OnInit {
   userEmail: string;
   otherUsers: User[] = [];
   userAuthSub: Subscription;
   userSub: Subscription;
   isUserAuthenticated = false;
 
-  constructor(public authUserService: UsersAuthService, private userService: UsersService ) {}
+  constructor(public authUserService: UsersAuthService, private userService: UsersService, private followingService: FollowingService ) {}
 
   ngOnInit() {
     this.userEmail = this.authUserService.getUserEmail();
@@ -39,12 +40,15 @@ export class ExploreComponent implements OnInit{
 
   followUser(event: Event, email: string) {
     const buttonVal = event.target as HTMLInputElement;
+    console.log('Button Val:', buttonVal.innerHTML);
     if ( buttonVal.innerHTML === 'FOLLOW') {
       buttonVal.innerHTML = 'UNFOLLOW';
       buttonVal.style.color = 'red';
-    } else {
+      this.followingService.followUser(this.userEmail, email);
+    } else if (buttonVal.innerHTML === 'UNFOLLOW') {
       buttonVal.innerHTML = 'FOLLOW';
       buttonVal.style.color = 'indigo';
+      this.followingService.unfollowUser(this.userEmail, email);
     }
   }
 }
