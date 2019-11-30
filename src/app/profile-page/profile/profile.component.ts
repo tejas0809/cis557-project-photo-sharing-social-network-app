@@ -12,7 +12,7 @@ import { PhotosService } from '../photo-upload/photo.service';
   styleUrls: ['./profile.component.css']
 })
 
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit {
   userEmail: string;
   userInfo: User;
   userAuthSub: Subscription;

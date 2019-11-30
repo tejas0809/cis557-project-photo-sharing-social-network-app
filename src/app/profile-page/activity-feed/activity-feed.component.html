@@ -1,14 +1,58 @@
+<div>
 <mat-card>
+  <mat-card-header>
+    <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
+    <mat-card-title>Nikhil Motwani</mat-card-title>
+    <mat-card-subtitle>nmotwani@seas.upenn.edu</mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
     <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-    <mat-card-content>
-      <p>
-        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-        bred for hunting.
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>LIKE</button>
-      <button mat-button>DISLIKE</button>
-    </mat-card-actions>
-  </mat-card>
+    <p>
+      This is the caption of the image
+    </p>
+  </mat-card-content>
+  <mat-card-actions align='center'>
+      <button mat-button (click)="likePost($event)" color='primary'>LIKE</button>
+  </mat-card-actions>
+</mat-card>
+</div>
+  <mat-card class="example-card">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Shiba Inu</mat-card-title>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <p>
+          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+          bred for hunting.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+      </mat-card-actions>
+    </mat-card>
+
+<div *ngIf = "photos.length > 0">
+<mat-card  *ngFor="let photo of photos">
+  <mat-card-header>
+    <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
+    <mat-card-title>{{photo.fname}} {{photo.lname}}</mat-card-title>
+    <mat-card-subtitle>{{photo.userEmail}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+   <img mat-card-image [src]=photo.imagePath alt="Photo1">
+   <p>
+     {{photo.caption}}
+   </p>
+  </mat-card-content>
+  <mat-card-actions align='center'>
+      <button mat-button (click)="likePost($event, photo)" color='primary'>LIKE</button>
+  </mat-card-actions>
+</mat-card>
+</div>

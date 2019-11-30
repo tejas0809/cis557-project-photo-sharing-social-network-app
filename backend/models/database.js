@@ -1,47 +1,46 @@
-//const sqlite3 = require('sqlite3').verbose();
 var mysql = require('mysql');
 
-const DB_NAME = 'Pixagram';
+const DB_NAME = 'pixagram';
 var con = mysql.createConnection({
   host: '127.0.0.1',
+  port: '3306',
   user: 'root',
-  password: 'password', 
+  password: 'password',
   database: DB_NAME
   });
   con.connect(function(err) {
     if (err) throw err;
     //Select all customers and return the result object:
-    //con.query("CREATE TABLE User(email VARCHAR(150) NOT NULL,pswd VARCHAR(20) NOT NULL,fname VARCHAR(150) NOT NULL,lname VARCHAR(150) NOT NULL, dob DATE NULL,gender VARCHAR(20) NULL,country VARCHAR(20) NULL,city VARCHAR(20) NULL,profileimagePath VARCHAR(1000) NULL,coverimagePath VARCHAR(1000) NULL,visibility VARCHAR(20) NOT NULL default 'public', PRIMARY KEY     (email))",
-    con.query(`CREATE TABLE IF NOT EXISTS User
+    con.query(`CREATE TABLE IF NOT EXISTS Users
     (
       email VARCHAR(150) NOT NULL,
-      pswd VARCHAR(200) NOT NULL,
+      password VARCHAR(200) NOT NULL,
       fname VARCHAR(150) NOT NULL,
       lname VARCHAR(150) NOT NULL,
-      bio  VARCHAR(300) NOT NULL,
-      dob DATE NULL,
-      gender VARCHAR(20) NULL,
-      country VARCHAR(20) NULL,
-      city VARCHAR(20) NULL,
-      profileimagePath VARCHAR(1000) NULL,
-      coverimagePath VARCHAR(1000) NULL,
-      visibility VARCHAR(20) NOT NULL default 'public',
+      bio  VARCHAR(300),
+      dob DATE,
+      gender VARCHAR(20),
+      country VARCHAR(20),
+      city VARCHAR(20),
+      profileImagePath VARCHAR(1500),
+      coverImagePath VARCHAR(1500),
+      visibility VARCHAR(20) default 'public',
       PRIMARY KEY     (email)
     )`,function (err, result, fields) {
       if (err) throw err;
       console.log(result);
     });
-    //con.query("CREATE TABLE Post(id INT unsigned NOT NULL AUTO_INCREMENT, postTimestamp timestamp default current_timestamp not null,imagePath VARCHAR(1000) NOT NULL, caption VARCHAR(500) NULL, userEmail VARCHAR(150) NOT NULL, PRIMARY KEY     (id),FOREIGN KEY (userEmail) REFERENCES User (email) ON UPDATE CASCADE ON DELETE CASCADE)",
-    con.query(`CREATE TABLE IF NOT EXISTS Post
+
+    con.query(`CREATE TABLE IF NOT EXISTS Posts
     (
-      id          INT unsigned NOT NULL AUTO_INCREMENT, # Unique ID for the record
-      postTimestamp timestamp default current_timestamp not null,
+      id INT unsigned NOT NULL AUTO_INCREMENT,
+      postTimestamp timestamp default current_timestamp NOT NULL,
       imagePath VARCHAR(1000) NOT NULL,
-      caption VARCHAR(500) NULL,
+      caption VARCHAR(500),
       userEmail VARCHAR(150) NOT NULL,
       PRIMARY KEY     (id),
       FOREIGN KEY (userEmail)
-      REFERENCES User (email)
+      REFERENCES Users (email)
       ON UPDATE CASCADE
       ON DELETE CASCADE
     )`,function (err, result, fields) {
@@ -49,13 +48,13 @@ var con = mysql.createConnection({
       console.log(result);
     });
 
-    
+
     con.query(`CREATE TABLE IF NOT EXISTS Tags(
       post_id int(10) unsigned NOT NULL,
       email VARCHAR(150) NOT NULL,
       PRIMARY KEY(post_id,email),
-      FOREIGN KEY (email) REFERENCES User(email) ON UPDATE CASCADE ON DELETE CASCADE,
-      FOREIGN KEY(post_id) REFERENCES Post(id) ON UPDATE CASCADE ON DELETE CASCADE
+      FOREIGN KEY (email) REFERENCES Users(email) ON UPDATE CASCADE ON DELETE CASCADE,
+      FOREIGN KEY(post_id) REFERENCES Posts(id) ON UPDATE CASCADE ON DELETE CASCADE
     )`,function (err, result, fields) {
       if (err) throw err;
       console.log(result);
@@ -68,8 +67,8 @@ var con = mysql.createConnection({
       email2 VARCHAR(150) NOT NULL,
       followsTimestamp timestamp default current_timestamp NOT NULL,
       PRIMARY KEY (email1,email2),
-      FOREIGN KEY (email1) REFERENCES User(email) ON UPDATE CASCADE ON DELETE CASCADE,
-      FOREIGN KEY (email2) REFERENCES User(email) on update cascade on delete cascade
+      FOREIGN KEY (email1) REFERENCES Users(email) ON UPDATE CASCADE ON DELETE CASCADE,
+      FOREIGN KEY (email2) REFERENCES Users(email) on update cascade on delete cascade
   )`,function (err, result, fields) {
     if (err) throw err;
     console.log(result);
@@ -82,10 +81,10 @@ var con = mysql.createConnection({
     email VARCHAR(150) NOT NULL, content varchar(4000) NOT NULL,
     commentsTimestamp timestamp default current_timestamp NOT NULL,
     PRIMARY KEY (commentId),
-    FOREIGN KEY (post_id) REFERENCES Post(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (email) REFERENCES User(email) on update cascade on delete cascade
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (email) REFERENCES Users(email) on update cascade on delete cascade
   )`,
-  
+
   function (err, result, fields) {
     if (err) throw err;
     console.log(result);
@@ -95,14 +94,14 @@ var con = mysql.createConnection({
     (
     email VARCHAR(150) NOT NULL,
     postId INT unsigned NOT NULL,
-    likesTimestamp timestamp default current_timestamp not null,
+    likesTimestamp timestamp default current_timestamp NOT NULL,
     PRIMARY KEY     (email,postId),
     FOREIGN KEY (email)
-      REFERENCES User (email)
+      REFERENCES Users (email)
       ON UPDATE CASCADE
       ON DELETE CASCADE,
       FOREIGN KEY (postId)
-      REFERENCES Post (id)
+      REFERENCES Posts (id)
       ON UPDATE CASCADE
       ON DELETE CASCADE
     )`,
@@ -111,8 +110,5 @@ var con = mysql.createConnection({
       console.log(result);
     });
   });
-
-
-
 
 module.exports = con;

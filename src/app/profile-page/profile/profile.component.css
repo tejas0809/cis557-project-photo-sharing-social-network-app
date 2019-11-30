@@ -69,3 +69,7 @@ mat-card{
   font-weight: bold;
   font-size: 1.5vw;
 }
+
+mat-card-content {
+  margin-top: 1em;
+}

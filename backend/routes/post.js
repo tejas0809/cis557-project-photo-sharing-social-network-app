@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-//const db = require('../models/database');
 const db = require('../models/database');
 
 const MIME_TYPE_MAP = {
@@ -30,7 +29,7 @@ const storage = multer.diskStorage({
 });
 
 
-router.get('/:id', (req,res) => getPost(req,res));
+router.get('/:email', (req,res) => getPost(req,res));
 router.get('/user/:email', (req, res) => getPostsOfUser(req,res));
 router.post('/user/:email', multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
 router.post('/like:id' , (req,res) => likePost(req,res));
@@ -39,10 +38,9 @@ router.delete('/unlike:id',(req,res) => unlikePost(req,res));
 
 function getPostsOfUser(req, res) {
   console.log("Get all posts of a user");
-  const sql = 'select * from Post where userEmail = ?';
+  const sql = 'select * from Posts where userEmail = ?';
   const params = [req.params.email];
 
-  //db.all(sql, params, (err, rows) => {
     db.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
@@ -63,10 +61,10 @@ function createPostOfUser(req, res) {
     caption: req.body.caption,
     email: req.params.email
   }
-  
+
   console.log(newPhoto);
 
-  const insert = 'INSERT INTO Post (imagePath, caption, userEmail) VALUES (?,?,?)';
+  const insert = 'INSERT INTO Posts (imagePath, caption, userEmail) VALUES (?,?,?)';
   const values = [newPhoto.imagePath, newPhoto.caption, newPhoto.email];
 
   db.query(insert, values, function (err, result) {
@@ -85,7 +83,7 @@ function createPostOfUser(req, res) {
 
 function getPost(req,res) {
   console.log("getting one post");
-  const sql="select * from Post where id= ?";
+  const sql="select * from Posts where id= ?";
   const params=[req.params.id];
   db.query(sql, params, (err, row) => {
     if (err) {
@@ -137,8 +135,6 @@ function unlikePost(req,res){
       postunlike:values
     })
   })
-
-
-
 }
+
 module.exports = router;

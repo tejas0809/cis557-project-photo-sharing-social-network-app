@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-//const db = require('../models/database');
 const db = require('../models/database');
 const bcrypt = require("bcrypt");
 const multer = require("multer");
@@ -31,21 +30,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// router.get('', (req, res) => {
-//   console.log('READ all users');
-//   const sql = 'select * from users';
-//   const params = [];
-//   db.all(sql, params, (err, rows) => {
-//     if (err) {
-//       res.status(404).json({ error: err.message });
-//       return;
-//     }
-//     res.status(201).json({
-//       message: 'success',
-//       data: rows,
-//     });
-//   });
-// });
+
 router.get('/', (req, res) => getAllUsers(req,res));
 router.get('/following:email',(req,res) => getFollowing(req,res));
 router.get('/followers:email',(req,res) => getFollowers(req,res));
@@ -62,7 +47,7 @@ router.delete('/unfollow',(req, res) => unfollowUser(req,res));
 
 function getAllUsers(req,res) {
   console.log('READ all users');
-  const sql = 'select * from User';
+  const sql = 'select * from Users';
   const params = [];
   db.query(sql, params, (err, rows) => {
     if (err) {
@@ -79,10 +64,9 @@ function getAllUsers(req,res) {
 
 function  getUser(req, res)  {
   console.log('READ a user by email');
-  const sql = 'select * from User where email = ?';
+  const sql = 'select * from Users where email = ?';
   const params = [req.params.email];
-  //db.get(sql, params, (err, row) => {
-    db.query(sql, params, (err, row) => {
+  db.query(sql, params, (err, row) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -95,17 +79,14 @@ function  getUser(req, res)  {
 
     res.json({
       message: 'success',
-      user: row,
+      user: row[0],
     });
   });
 }
 
 function signupNewUser(req, res) {
-  // console.log(req);
-  // console.log(req.headers);
   console.log('Signing up new user');
   console.log(req.body);
-  // console.log(req.file);
 
   bcrypt.hash(req.body.password, 10).then( hash => {
     let password = hash;
@@ -121,11 +102,10 @@ function signupNewUser(req, res) {
         bio: req.body.bio
      };
 
-     const insert = 'INSERT INTO User (email, pswd, fname, lname, dob, gender, country, city, bio) VALUES (?,?,?,?,?,?,?,?,?)';
+     const insert = 'INSERT INTO Users (email, password, fname, lname, dob, gender, country, city, bio) VALUES (?,?,?,?,?,?,?,?,?)';
      const values = [newUser.email, password, newUser.fname, newUser.lname, newUser.dob, newUser.gender, newUser.country, newUser.city, newUser.bio ];
 
-      //db.run(insert, values, function (err, result) {
-        db.query(insert, values, function (err, result) {
+      db.query(insert, values, function (err, result) {
         if (err) {
           console.log(err.message);
           if(err.message.includes("ER_DUP_ENTRY")){
@@ -193,11 +173,10 @@ function followUser(req,res) {
 }
 
 function loginUser(req, res) {
-  const sql = 'select * from User where email = ?';
+  const sql = 'select * from Users where email = ?';
   const params = [req.body.email, req.body.password];
 
-  //db.get(sql, params, (err, row) => {
-    db.query(sql, params, (err, row) => {
+  db.query(sql, params, (err, row) => {
     if (err) {
       res.status(401).json({ error: 'err: Authentication Failed' });
       return;
@@ -209,33 +188,33 @@ function loginUser(req, res) {
         message: 'No User Found!'
       });
     }
-    
-    console.log(row[0].pswd);
+
+    console.log(row[0].password);
 
     const email = row[0].email;
     console.log(email);
 
-    bcrypt.compare(req.body.password, row[0].pswd, function(err, result) {
+    bcrypt.compare(req.body.password, row[0].password, function(err, result) {
       if (err){
         // handle error
         return res.status(401).json({ error: 'Authentication Failed' });
       }
       if (result)
       {
-        
+
         // Send JWT
         const token = jwt.sign(
           { email: email },
           'cis_557_programming_for_the_web_longer_secret_password',
           {expiresIn: '1h'}
         );
-    
+
         return res.status(200).json({
           token:token,
           expiresIn: 3600,
           email: email
         });
-      } 
+      }
       else {
         // response is OutgoingMessage object that server response http request
         return res.status(401).json({
@@ -243,29 +222,6 @@ function loginUser(req, res) {
         });
       }
     });
-    
-    // result = bcrypt.compare(req.body.password, row.password);
-
-    // if(!result){
-    //   return res.status(401).json({
-    //     message: 'Auth Failed'
-    //   });
-    // }
-
-    // const email = row.email;
-
-    // const token = jwt.sign(
-    //   { email: email },
-    //   'cis_557_programming_for_the_web_longer_secret_password',
-    //   {expiresIn: '1h'}
-    // );
-
-    // res.status(200).json({
-    //   token:token,
-    //   expiresIn: 3600,
-    //   email: email
-    // });
-
   });
 
 }
@@ -274,11 +230,10 @@ function loginUser(req, res) {
 
 function getFollowers(req, res) {
   console.log("Get all followers of a user");
-  const sql = 'select User.email,User.fname, User.lname, User.bio, User.profileimagePath from Follows inner join User on User.email=Follows.email1 where Follows.email2 = ?';
+  const sql = 'select User.email,User.fname, User.lname, User.bio, User.profileimagePath from Follows inner join Users on Users.email=Follows.email1 where Follows.email2 = ?';
   const params = [req.params.email];
 
-  //db.all(sql, params, (err, rows) => {
-    db.query(sql, params, (err, rows) => {
+  db.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -296,8 +251,7 @@ function getFollowerCount(req, res) {
   const sql = 'select count(*) as count1 from Follows where email2 = ?';
   const params = [req.params.email];
 
-  //db.all(sql, params, (err, rows) => {
-    db.query(sql, params, (err, rows) => {
+  db.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -312,11 +266,10 @@ function getFollowerCount(req, res) {
 
 function getFollowing(req, res) {
   console.log("Get all the users which the current user is following");
-  const sql = 'select User.email,User.fname, User.lname, User.bio, User.profileimagePath from Follows inner join User on User.email=Follows.email2 where Follows.email1 = ?';
+  const sql = 'select Users.email,Users.fname, Users.lname, Users.bio, Users.profileimagePath from Follows inner join Users on Users.email=Follows.email2 where Follows.email1 = ?';
   const params = [req.params.email];
 
-  //db.all(sql, params, (err, rows) => {
-    db.query(sql, params, (err, rows) => {
+  db.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -331,11 +284,10 @@ function getFollowing(req, res) {
 
 function getActivityFeedPosts(req,res){
   console.log("getting posts of the people the current user is following in chronological order");
-  const sql='select Post.id,Post.postTimestamp,Post.imagePath, Post.caption, Post.userEmail, User.fname, User.lname, User.profileimagePath from Post inner join Follows on Post.userEmail=Follows.email2 inner join User on User.email=Follows.email2 where Follows.email1 = ? order by Post.postTimestamp';
+  const sql='select Post.id,Post.postTimestamp,Post.imagePath, Post.caption, Post.userEmail, Users.fname, Users.lname, Users.profileimagePath from Post inner join Follows on Post.userEmail=Follows.email2 inner join Users on Users.email=Follows.email2 where Follows.email1 = ? order by Post.postTimestamp';
   const params = [req.params.email];
 
-  //db.all(sql, params, (err, rows) => {
-    db.query(sql, params, (err, rows) => {
+  db.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -346,4 +298,5 @@ function getActivityFeedPosts(req,res){
     });
   });
 }
+
 module.exports = router;

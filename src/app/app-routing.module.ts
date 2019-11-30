@@ -10,6 +10,9 @@ import { ProfileComponent } from './profile-page/profile/profile.component';
 import { ActivityFeedComponent } from './profile-page/activity-feed/activity-feed.component';
 import { PhotoUploadComponent } from './profile-page/photo-upload/photo-upload.component';
 import { UserAuthGuard } from './profile-page/user-list/userauth.guard';
+import { ExploreComponent } from './profile-page/explore/explore.component';
+import { FollowersComponent } from './profile-page/followers/followers.component';
+import { FollowingComponent } from './profile-page/following/following.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -27,13 +30,28 @@ const routes: Routes = [
         canActivate: [UserAuthGuard]
       },
       {
-        path: 'activityfeed',
-        component: ActivityFeedComponent,
+        path: 'photoUpload',
+        component: PhotoUploadComponent,
         canActivate: [UserAuthGuard]
       },
       {
-        path: 'photoUpload',
-        component: PhotoUploadComponent,
+        path: 'explore',
+        component: ExploreComponent,
+        canActivate: [UserAuthGuard]
+      },
+      {
+        path: 'followers',
+        component: FollowersComponent,
+        canActivate: [UserAuthGuard]
+      },
+      {
+        path: 'following',
+        component: FollowingComponent,
+        canActivate: [UserAuthGuard]
+      },
+      {
+        path: 'activityfeed',
+        component: ActivityFeedComponent,
         canActivate: [UserAuthGuard]
       }
   ]},

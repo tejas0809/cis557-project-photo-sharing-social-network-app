@@ -17,6 +17,7 @@
       </div>
 
       <img src='../../assets/images/bckg-an1.jpg' alt='Profile Photo' class="profile-photo">
+
       <span class="profile-name" *ngIf="isUserAuthenticated && userInfo">{{ userInfo.fname }} {{ userInfo.lname }}</span>
       <div class="profile-email" *ngIf="isUserAuthenticated && userInfo">{{ userInfo.email }}</div>
 
@@ -26,6 +27,7 @@
       <mat-divider></mat-divider>
       <a mat-list-item routerLink="myprofile">My Profile</a>
       <a mat-list-item routerLink="activityfeed">Activity Feed</a>
+      <a mat-list-item routerLink="activityfeed">Liked Posts</a>
       <!-- <a mat-list-item href="#">Link 3</a> -->
     </mat-nav-list>
   </mat-sidenav>

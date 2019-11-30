@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthData } from './auth-data.model';
 import { Subject } from 'rxjs';
+import { UsersService } from './users.service';
+import { User } from './user.model';
 
 @Injectable()
 export class UsersAuthService {
@@ -12,7 +14,7 @@ export class UsersAuthService {
   private userEmail: string;
   private userAuthStatusListener = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private userService: UsersService) {}
 
   createUser(email: string, password: string, fname: string, lname: string, dob: string, gender: string,
              country: string, city: string, bio: string) {
@@ -51,12 +53,25 @@ export class UsersAuthService {
               console.log(userData);
 
               this.http
-              .post<{ message: string;user: any }>(
+              .post<{ message: string, user: any }>(
                 'http://localhost:3000/api/user/signup',
                 userData
               )
               .subscribe(res => {
-                if (res.message === 'success'){
+                if (res.message === 'success') {
+                  const newUser: User = {
+                    email: res.user.email,
+                    fname: res.user.fname,
+                    lname: res.user.lname,
+                    dob: res.user.dob,
+                    gender: res.user.gender,
+                    country: res.user.country,
+                    city: res.user.city,
+                    bio: res.user.bio,
+                    profileimagePath: res.user.profileImagepath,
+                    coverimagePath: res.user.coverImagePath
+                  };
+                  this.userService.addUser(newUser);
                   this.router.navigate(['/login']);
                 }
               });
@@ -71,6 +86,7 @@ export class UsersAuthService {
       )
       .subscribe(res => {
         this.token = res.token;
+        console.log(res);
         if (this.token) {
           const expireDuration = res.expiresIn;
           this.setUserAuthTimer(expireDuration);
@@ -98,7 +114,7 @@ export class UsersAuthService {
 
   autoAuthenticateUser() {
     const authInfo = this.getUserAuthData();
-    if(! authInfo){
+    if (! authInfo) {
       return;
     }
 
@@ -110,36 +126,36 @@ export class UsersAuthService {
       this.userEmail = authInfo.email;
       this.setUserAuthTimer(expiresIn / 1000);
       this.userAuthStatusListener.next(true);
-      this.router.navigate(['/profile']);
+      // this.router.navigate(['/profile']);
     }
   }
 
-  getToken(){
+  getToken() {
     return this.token;
   }
 
-  getUserEmail(){
+  getUserEmail() {
     return this.userEmail;
   }
 
-  getIsUserAuth(){
+  getIsUserAuth() {
     return this.isUserAuth;
   }
 
-  getUserAuthStatusListener(){
+  getUserAuthStatusListener() {
     return this.userAuthStatusListener.asObservable();
   }
 
-  private setUserAuthTimer(expireDuration){
+  private setUserAuthTimer(expireDuration) {
     this.tokenTimer = setTimeout(() => {
       this.logout();
     }, expireDuration * 1000);
   }
 
-  private saveUserAuthData(token: string, expirationDate: Date, email: string){
+  private saveUserAuthData(token: string, expirationDate: Date, email: string) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiration', expirationDate.toISOString());
-    localStorage.setItem('email', email)
+    localStorage.setItem('email', email);
   }
 
   private clearUserAuthData() {
@@ -151,7 +167,7 @@ export class UsersAuthService {
   private getUserAuthData() {
     const token = localStorage.getItem('token');
     const expirationDate = localStorage.getItem('expiration');
-    const userInfo = localStorage.getItem('email')
+    const userInfo = localStorage.getItem('email');
     if (!token || !expirationDate || !userInfo) {
       return;
     }

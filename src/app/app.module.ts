@@ -16,7 +16,9 @@ import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatListModule } from '@angular/material/list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,8 +28,6 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MatListModule } from '@angular/material/list';
 import { ProfileComponent } from './profile-page/profile/profile.component';
 import { ActivityFeedComponent } from './profile-page/activity-feed/activity-feed.component';
 import { ProfileHeaderComponent } from './profile-page/profile-header/profile-header.component';
@@ -35,6 +35,14 @@ import { PhotoUploadComponent } from './profile-page/photo-upload/photo-upload.c
 import { UsersAuthService } from './profile-page/user-list/usersauth.service';
 import { UsersService } from './profile-page/user-list/users.service';
 import { PhotosService } from './profile-page/photo-upload/photo.service';
+import { ExploreComponent } from './profile-page/explore/explore.component';
+import { FollowersComponent } from './profile-page/followers/followers.component';
+import { FollowingComponent } from './profile-page/following/following.component';
+import { FollowersService } from './profile-page/followers/followers.service';
+import { FollowingService } from './profile-page/following/following.service';
+import { ActivityFeedService } from './profile-page/activity-feed/activity-feed.service';
+import { LikedPostComponent } from './profile-page/liked-posts/liked-post..component';
+import { LikedPostsService } from './profile-page/liked-posts/liked-posts.service';
 
 @NgModule({
   declarations: [
@@ -48,7 +56,11 @@ import { PhotosService } from './profile-page/photo-upload/photo.service';
     ProfileComponent,
     ActivityFeedComponent,
     ProfileHeaderComponent,
-    PhotoUploadComponent
+    PhotoUploadComponent,
+    ExploreComponent,
+    FollowersComponent,
+    FollowingComponent,
+    LikedPostComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +86,7 @@ import { PhotosService } from './profile-page/photo-upload/photo.service';
     MatSelectModule,
     HttpClientModule
   ],
-  providers: [UsersAuthService, UsersService, PhotosService],
+  providers: [UsersAuthService, UsersService, PhotosService, FollowersService, FollowingService, ActivityFeedService, LikedPostsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

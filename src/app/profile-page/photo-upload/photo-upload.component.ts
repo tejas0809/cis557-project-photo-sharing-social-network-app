@@ -8,14 +8,14 @@ import { PhotosService } from './photo.service';
   styleUrls: ['./photo-upload.component.css']
 })
 
-export class PhotoUploadComponent implements OnInit{
+export class PhotoUploadComponent implements OnInit {
   userPhotos: FormGroup;
   ImagePreview: string;
   showContent = false;
 
   constructor(public photoService: PhotosService) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.userPhotos = new FormGroup({
       image: new FormControl(null, {
         validators: []

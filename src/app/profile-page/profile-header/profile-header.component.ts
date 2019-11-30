@@ -8,11 +8,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./profile-header.component.css']
 })
 
-export class ProfileHeaderComponent implements OnInit{
+export class ProfileHeaderComponent implements OnInit {
   isUserAuthenticated = false;
   private authListenerSubs: Subscription;
 
-  constructor(private authService: UsersAuthService){}
+  constructor(private authService: UsersAuthService) {}
 
   ngOnInit() {
     this.isUserAuthenticated = this.authService.getIsUserAuth();

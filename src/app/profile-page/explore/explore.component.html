@@ -1,0 +1,35 @@
+ <div class="flex-container-follow" *ngIf="otherUsers.length > 0">
+    <mat-card *ngFor="let user of otherUsers">
+      <mat-card-header>
+          <mat-card-title>{{ user.fname }} {{ user.lname }}</mat-card-title>
+          <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+            <img mat-card-image src='assets/images/bckg-an1.jpg'>
+      </mat-card-content>
+      <mat-divider></mat-divider>
+      <mat-card-actions align='center'>
+          <button mat-stroked-button color="primary" (click)='followUser($event, user.email)'>FOLLOW</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- <div class="flex-container-follow">
+      <mat-card>
+
+        <mat-card-header>
+            <mat-card-title>Nikhil Motwani</mat-card-title>
+            <mat-card-subtitle>nmotwani@seas.upenn.edu</mat-card-subtitle>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+              <img mat-card-image src='assets/images/bckg-an1.jpg'>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-actions align='center'>
+            <button mat-stroked-button color="primary" (click)='followUser($event)'>FOLLOW</button>
+        </mat-card-actions>
+
+      </mat-card>
+    </div> -->
