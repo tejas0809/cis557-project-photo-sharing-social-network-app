@@ -9,10 +9,10 @@ export const mimeType = (
   }
   const file = control.value as File;
   const fileReader = new FileReader();
-  const frObs = Observable.create(
+  const frObs = Observable.create (
     (observer: Observer<{ [key: string]: any }>) => {
       fileReader.addEventListener('loadend', () => {
-        const arr = new Uint8Array(fileReader.result).subarray(0, 4);
+        const arr = new Uint8Array(fileReader.result as ArrayBuffer).subarray(0, 4);
         let header = "";
         let isValid = false;
         for (let i = 0; i < arr.length; i++) {
