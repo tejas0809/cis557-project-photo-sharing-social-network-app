@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
 router.get('/', (req, res) => getAllUsers(req,res));
 router.get('/following/:email',(req,res) => getFollowing(req,res));
 router.get('/followers/:email',(req,res) => getFollowers(req,res));
-router.get('/followerCount/:email',(req,res) => getFollowerCount(req,res));
+router.get('/followersCount/:email',(req,res) => getFollowerCount(req,res));
 router.get('/activityFeed/:email',(req,res) => getActivityFeedPosts(req,res));
 router.get('/:email', (req, res) => getUser(req, res));
 router.post('/signup', (req, res) => signupNewUser(req,res));
@@ -196,7 +196,7 @@ function loginUser(req, res) {
     bcrypt.compare(req.body.password, row[0].password, function(err, result) {
       if (err){
         // handle error
-        return res.status(401).json({ error: 'Authentication Failed' });
+        return res.status(401).json({ message: 'Authentication Failed' });
       }
       if (result)
       {
@@ -211,13 +211,14 @@ function loginUser(req, res) {
         return res.status(200).json({
           token:token,
           expiresIn: 3600,
-          email: email
+          email: email,
+          message: 'success'
         });
       }
       else {
         // response is OutgoingMessage object that server response http request
         return res.status(401).json({
-          message: 'Auth Failed'
+          message: 'Authentication Failed'
         });
       }
     });

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const db = require('../models/database');
+const checkAuth = require("../middleware/check-auth");
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -31,9 +32,9 @@ const storage = multer.diskStorage({
 
 router.get('/:id', (req,res) => getPost(req,res));
 router.get('/user/:email', (req, res) => getPostsOfUser(req,res));
-router.post('/user/:email', multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
-router.post('/like/:id' , (req,res) => likePost(req,res));
-router.delete('/unlike/:id&:email',(req,res) => unlikePost(req,res));
+router.post('/user/:email', checkAuth, multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
+router.post('/like/:id' , checkAuth, (req,res) => likePost(req,res));
+router.delete('/unlike/:id&:email',checkAuth, (req,res) => unlikePost(req,res));
 
 
 function getPostsOfUser(req, res) {

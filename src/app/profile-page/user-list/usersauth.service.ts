@@ -13,6 +13,7 @@ export class UsersAuthService {
   private isUserAuth = false;
   private userEmail: string;
   private userAuthStatusListener = new Subject<boolean>();
+  private loginAllow: any;
 
   constructor(private http: HttpClient, private router: Router, private userService: UsersService) {}
 
@@ -79,27 +80,52 @@ export class UsersAuthService {
 
   login(email: string, password: string) {
     const authData: AuthData = { email, password};
+    this.loginAllow = sessionStorage.getItem('loginallowed')
+    if(!this.loginAllow){
+      this.loginAllow = '1';
+    }
+    if(this.loginAllow !== 'false') {
     this.http
-      .post<{ token: string; expiresIn: number, email: string }>(
+      .post<{ token: string; expiresIn: number, email: string, message: string }>(
         'http://localhost:3000/api/user/login',
         authData
       )
       .subscribe(res => {
-        this.token = res.token;
-        console.log(res);
-        if (this.token) {
-          const expireDuration = res.expiresIn;
-          this.setUserAuthTimer(expireDuration);
-          this.isUserAuth = true;
-          this.userAuthStatusListener.next(true);
-          this.userEmail = res.email;
-          const curr = new Date();
-          const expirationDate = new Date(curr.getTime() + expireDuration * 1000);
-          this.saveUserAuthData(this.token, expirationDate, this.userEmail);
-          this.router.navigate(['/profile']);
-        }
+          this.token = res.token;
+          // console.log(res);
+          if (this.token) {
+            const expireDuration = res.expiresIn;
+            this.setUserAuthTimer(expireDuration);
+            this.isUserAuth = true;
+            this.userAuthStatusListener.next(true);
+            this.userEmail = res.email;
+            const curr = new Date();
+            const expirationDate = new Date(curr.getTime() + expireDuration * 1000);
+            this.saveUserAuthData(this.token, expirationDate, this.userEmail);
+            this.router.navigate(['/profile']);
+          }
+      },
+      res => {
+        if (res.error.message === 'Authentication Failed') {
+          let mislogin = sessionStorage.getItem('loginfailed');
 
+          if (!mislogin) {
+            sessionStorage.setItem('loginfailed', '0');
+          }
+
+          mislogin = sessionStorage.getItem('loginfailed');
+
+          let mislogno = parseInt(mislogin, 10);
+          console.log('mislogno:', mislogno);
+          if (mislogno > 6) {
+            console.log('Exceeded Maximum failed login attempts');
+            sessionStorage.setItem('loginallowed', false.toString());
+          }
+          mislogno += 1;
+          sessionStorage.setItem('loginfailed', mislogno.toString());
+        }
       });
+    }
   }
 
   logout() {
@@ -153,21 +179,21 @@ export class UsersAuthService {
   }
 
   private saveUserAuthData(token: string, expirationDate: Date, email: string) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('expiration', expirationDate.toISOString());
-    localStorage.setItem('email', email);
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('expiration', expirationDate.toISOString());
+    sessionStorage.setItem('email', email);
   }
 
   private clearUserAuthData() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expiration');
-    localStorage.removeItem('email');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('expiration');
+    sessionStorage.removeItem('email');
   }
 
   private getUserAuthData() {
-    const token = localStorage.getItem('token');
-    const expirationDate = localStorage.getItem('expiration');
-    const userInfo = localStorage.getItem('email');
+    const token = sessionStorage.getItem('token');
+    const expirationDate = sessionStorage.getItem('expiration');
+    const userInfo = sessionStorage.getItem('email');
     if (!token || !expirationDate || !userInfo) {
       return;
     }

@@ -16,7 +16,7 @@ import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatListModule } from '@angular/material/list';
 
@@ -43,6 +43,8 @@ import { FollowingService } from './profile-page/following/following.service';
 import { ActivityFeedService } from './profile-page/activity-feed/activity-feed.service';
 import { LikedPostComponent } from './profile-page/liked-posts/liked-post..component';
 import { LikedPostsService } from './profile-page/liked-posts/liked-posts.service';
+import { EditProfileComponent } from './profile-page/edit-profile/edit-profile.component';
+import { AuthInterceptor } from './profile-page/user-list/user-auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,8 @@ import { LikedPostsService } from './profile-page/liked-posts/liked-posts.servic
     ExploreComponent,
     FollowersComponent,
     FollowingComponent,
-    LikedPostComponent
+    LikedPostComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +89,8 @@ import { LikedPostsService } from './profile-page/liked-posts/liked-posts.servic
     MatSelectModule,
     HttpClientModule
   ],
-  providers: [UsersAuthService, UsersService, PhotosService, FollowersService, FollowingService, ActivityFeedService, LikedPostsService],
+  providers: [UsersAuthService, UsersService, PhotosService, FollowersService, FollowingService, ActivityFeedService,
+              LikedPostsService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

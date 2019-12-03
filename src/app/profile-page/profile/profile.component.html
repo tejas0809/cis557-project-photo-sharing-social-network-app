@@ -13,17 +13,17 @@
     Posts
     </p>
   </div>
-  <div class="box">
+  <div class="box show-num-click" routerLink='/profile/followers'>
       <div class="show-num">
-          <span>40</span>
+          <span>{{ followerCount }}</span>
         </div>
         <p class="profile-stats">
         Followers
         </p>
   </div>
-  <div class="box">
+  <div class="box show-num-click" routerLink='/profile/following'>
       <div class="show-num">
-          <span>100</span>
+          <span>{{ followingCount }}</span>
         </div>
         <p class="profile-stats">
         Following

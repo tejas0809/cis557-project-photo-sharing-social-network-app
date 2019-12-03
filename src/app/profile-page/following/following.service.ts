@@ -66,4 +66,8 @@ export class FollowingService {
     });
   }
 
+  // getFollowingCount(email: string) {
+  //   return this.http
+  //   .get<{message: string, followerCount: number}>('http://localhost:3000/api/user/followingCount/' + email);
+  // }
 }

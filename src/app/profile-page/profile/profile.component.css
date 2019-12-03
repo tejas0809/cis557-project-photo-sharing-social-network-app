@@ -37,6 +37,10 @@
   box-shadow:0 4px 15px 0 rgba(255, 254, 254, 0.8);
 }
 
+.show-num-click:hover{
+  cursor: pointer;
+}
+
 span{
   margin: auto;
 }
