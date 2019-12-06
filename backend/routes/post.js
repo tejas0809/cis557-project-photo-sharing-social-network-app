@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+//const db = require('../models/database');
 const db = require('../models/database');
 
 const MIME_TYPE_MAP = {
@@ -29,22 +30,33 @@ const storage = multer.diskStorage({
 });
 
 
-router.get('/:email', (req,res) => getPost(req,res));
+router.get('/:id', (req,res) => getPost(req,res));
 router.get('/user/:email', (req, res) => getPostsOfUser(req,res));
 router.post('/user/:email', multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
-router.post('/like:id' , (req,res) => likePost(req,res));
-router.delete('/unlike:id',(req,res) => unlikePost(req,res));
-
+router.post('/like/:id' , (req,res) => likePost(req,res));
+router.delete('/unlike/:id',(req,res) => unlikePost(req,res));
+router.put('/:id',(req,res) => editPost(req,res));
+router.post('/comment/:id',(req,res) => addComment(req,res));
+router.get('/comments/:id',(req,res) => getComments(req,res));
+router.put('/comment/:id',(req,res) => editComment(req,res));
+router.delete('comment/:id',(req,res) => deleteComment(req,res));
+router.delete('/:id',(req,res) => deletePost(req,res));
 
 function getPostsOfUser(req, res) {
   console.log("Get all posts of a user");
   const sql = 'select * from Posts where userEmail = ?';
   const params = [req.params.email];
 
+  //db.all(sql, params, (err, rows) => {
     db.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
+    }
+    if(rows.length==0){
+      return res.status(401).json({
+        message: 'User has no posts yet!'
+      })
     }
     res.status(200).json({
       message: 'success',
@@ -61,7 +73,7 @@ function createPostOfUser(req, res) {
     caption: req.body.caption,
     email: req.params.email
   }
-
+  
   console.log(newPhoto);
 
   const insert = 'INSERT INTO Posts (imagePath, caption, userEmail) VALUES (?,?,?)';
@@ -115,9 +127,9 @@ function likePost(req,res){
     }
     res.json({
       message:'success',
-      postlike:values
-    })
-  })
+      postlike:result
+    });
+  });
 }
 
 function unlikePost(req,res){
@@ -133,8 +145,106 @@ function unlikePost(req,res){
     res.json({
       message:'success',
       postunlike:values
-    })
-  })
+    });
+  });
 }
+
+function editPost(req,res){
+  console.log("edit a post");
+  const values=[req.body.caption,req.params.id];
+  const sql="update Posts set caption=? where id=?";
+  db.query(sql,values,function(err, result){
+    if(err){
+      console.log(err);
+      res.status(400).json({message:err.message});
+      return;
+    }
+    res.json({
+      message:'success',
+    });
+  });
+}
+
+function addComment(req,res){
+  console.log("adding a new comment");
+  const values=[req.params.id,req.body.email,req.body.content];
+  const sql='insert into Comments (post_id, email, content) values (?,?,?)';
+  db.query(sql,values,function(err,result){
+    if(err){
+      console.log(err);
+      res.status(400).json({message:err.message});
+      return;
+    }
+    // const id1=result.insertId;
+    res.json({
+      message:'success',
+      c_id:result.insertId
+    });
+  });
+}
+
+function getComments(req,res){
+  console.log("getting all comments for a post");
+  const values=[req.params.id];
+  const sql='select Users.fname, Users.lname, Comments.content, Comments.email, Comments.commentsTimestamp from Comments inner join Users on Comments.email=Users.email where post_id=? order by Comments.commentsTimestamp';
+  db.query(sql,values,function(err,result){
+    if(err){
+      console.log(err);
+      res.status(400).json({message:err.message});
+      return;
+    }
+    res.json({
+      message:'success',
+      comments:result
+    });
+  });
+}
+// #########
+function editComment(req,res){
+  console.log("editing a comment");
+  const values=[req.body.content,req.params.id]
+  const sql="update Comments set content=? where commentId=?";
+  db.query(sql,values,(err,rows) =>{
+    if(err){
+      res.status(400).json({message:err.message});
+      return;
+    }
+    res.status(200).json({
+      message:'success'
+    });
+  });
+}
+
+function deleteComment(req,res){
+  console.log("deleting a comment");
+  const values=[req.params.id];
+  const sql='delete from Comments where commentId=?';
+  db.query(sql,values,(err,rows) =>{
+    if(err){
+      res.status(400).json({message:err.message});
+      return;
+    }
+    res.status(200).json({
+      message:'success'
+    });
+  });
+}
+
+function deletePost(req,res){
+  console.log("delete a post");
+  const values=[req.params.id];
+  const sql='delete from Posts where id=?';
+  db.query(sql,values,(err,rows) =>{
+    if(err){
+      res.status(400).json({message:err.message});
+      return;
+    }
+    res.status(200).json({
+      message:'success'
+    });
+  });
+}
+
+
 
 module.exports = router;

@@ -32,16 +32,19 @@ const storage = multer.diskStorage({
 
 
 router.get('/', (req, res) => getAllUsers(req,res));
-router.get('/following:email',(req,res) => getFollowing(req,res));
-router.get('/followers:email',(req,res) => getFollowers(req,res));
-router.get('/followerCount:email',(req,res) => getFollowerCount(req,res));
+router.get('/following/:email',(req,res) => getFollowing(req,res));
+router.get('/followers/:email',(req,res) => getFollowers(req,res));
+router.get('/followerCount/:email',(req,res) => getFollowerCount(req,res));
+router.get('/followingCount/:email',(req,res) => getFollowingCount(req,res));
 router.get('/activityFeed/:email',(req,res) => getActivityFeedPosts(req,res));
 router.get('/:email', (req, res) => getUser(req, res));
 router.post('/signup', (req, res) => signupNewUser(req,res));
 router.post('/login', (req, res) => loginUser(req,res));
 router.post('/follow', (req,res)=> followUser(req,res));
 router.delete('/unfollow',(req, res) => unfollowUser(req,res));
-
+router.put('/:email',(req,res) => editUserProfile(req,res));
+// router.get('/explore/:email',(req,res) => exploreUsers(req,res));
+// router.get('/followSuggestions/:email',(req,res) => userSuggestions(req,res));
 
 
 
@@ -230,7 +233,7 @@ function loginUser(req, res) {
 
 function getFollowers(req, res) {
   console.log("Get all followers of a user");
-  const sql = 'select User.email,User.fname, User.lname, User.bio, User.profileimagePath from Follows inner join Users on Users.email=Follows.email1 where Follows.email2 = ?';
+  const sql = 'select Users.email,Users.fname, Users.lname, Users.bio, Users.profileimagePath from Follows inner join Users on Users.email=Follows.email1 where Follows.email2 = ?';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
@@ -251,7 +254,7 @@ function getFollowerCount(req, res) {
   const sql = 'select count(*) as count1 from Follows where email2 = ?';
   const params = [req.params.email];
 
-  db.query(sql, params, (err, rows) => {
+  db.query(sql, params, (err, rows  => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -262,6 +265,24 @@ function getFollowerCount(req, res) {
     });
   });
 }
+
+function getFollowingCount(req, res) {
+  console.log("Get no of users the current user is following");
+  const sql = 'select count(*) as count1 from Follows where email1 = ?';
+  const params = [req.params.email];
+
+  db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(200).json({
+      message: 'success',
+      followingCount: rows[0].count1,
+    });
+  });
+}
+
 
 
 function getFollowing(req, res) {
@@ -284,7 +305,7 @@ function getFollowing(req, res) {
 
 function getActivityFeedPosts(req,res){
   console.log("getting posts of the people the current user is following in chronological order");
-  const sql='select Post.id,Post.postTimestamp,Post.imagePath, Post.caption, Post.userEmail, Users.fname, Users.lname, Users.profileimagePath from Post inner join Follows on Post.userEmail=Follows.email2 inner join Users on Users.email=Follows.email2 where Follows.email1 = ? order by Post.postTimestamp';
+  const sql='select Posts.id,Posts.postTimestamp,Posts.imagePath, Posts.caption, Posts.userEmail, Users.fname, Users.lname, Users.profileimagePath from Posts inner join Follows on Posts.userEmail=Follows.email2 inner join Users on Users.email=Follows.email2 where Follows.email1 = ? order by Posts.postTimestamp';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
@@ -295,6 +316,21 @@ function getActivityFeedPosts(req,res){
     res.status(200).json({
       message: 'success',
       posts: rows,
+    });
+  });
+}
+
+function editUserProfile(req,res){
+  console.log("editing user profile");
+  const sql='update Users set fname=?, lname=?, bio=?, dob=?, gender=?, country=?, city=?, visibility=? where email=? ';
+  const values=[req.body.fname, req.body.lname, req.body.bio, req.body.dob, req.body.gender,req.body.country,req.body.city,req.body.visibility,req.params.email];
+  db.query(sql,values,(err,rows) =>{
+    if(err){
+      res.status(400).json({message:err.message});
+      return;
+    }
+    res.status(200).json({
+      message:'success'
     });
   });
 }
