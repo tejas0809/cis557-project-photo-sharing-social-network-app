@@ -5,6 +5,8 @@ import { UsersAuthService } from '../user-list/usersauth.service';
 import { UsersService } from '../user-list/users.service';
 import { Photo } from '../photo-upload/photo.model';
 import { PhotosService } from '../photo-upload/photo.service';
+import { FollowersService } from '../followers/followers.service';
+import { FollowingService } from '../following/following.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,8 +21,12 @@ export class ProfileComponent implements OnInit {
   postSub: Subscription;
   isUserAuthenticated = false;
   posts: Photo[] = [];
+  followerCount = 0;
+  followingCount = 0;
 
-  constructor(public authUserService: UsersAuthService, private userService: UsersService, private photoService: PhotosService ) {}
+  constructor(public authUserService: UsersAuthService, private userService: UsersService,
+              private photoService: PhotosService, private followerService: FollowersService,
+              private followingService: FollowingService ) {}
 
   ngOnInit() {
     this.userEmail = this.authUserService.getUserEmail();
@@ -41,5 +47,13 @@ export class ProfileComponent implements OnInit {
     .subscribe((posts: Photo[]) => {
       this.posts = posts;
     });
+
+    this.followerService.getFollowersCount(this.userEmail).subscribe( res => {
+      if (res.message === 'success') {
+        this.followerCount = res.followerCount;
+      }
+    });
+
+    // this.followerCount = this.followingService.getFollowingCount();
   }
 }

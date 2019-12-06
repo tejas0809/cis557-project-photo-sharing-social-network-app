@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PhotosService } from './photo.service';
+import { mimeType } from './mime-type-validator';
 
 @Component({
   selector: 'app-photo-upload',
@@ -18,7 +19,8 @@ export class PhotoUploadComponent implements OnInit {
   ngOnInit() {
     this.userPhotos = new FormGroup({
       image: new FormControl(null, {
-        validators: []
+        validators: [Validators.required],
+        asyncValidators: [mimeType]
       }),
       caption: new FormControl(null, {
         validators: []
@@ -42,7 +44,7 @@ export class PhotoUploadComponent implements OnInit {
     if ( this.userPhotos.invalid ) {
       return;
     }
-    console.log(this.userPhotos);
+    // console.log(this.userPhotos);
     this.photoService.addPhoto(this.userPhotos.value.image, this.userPhotos.value.caption);
 
     this.userPhotos.reset();

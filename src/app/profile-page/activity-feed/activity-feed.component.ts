@@ -17,6 +17,7 @@ export class ActivityFeedComponent implements OnInit {
   userAuthSub: Subscription;
   photoSub: Subscription;
   isUserAuthenticated = false;
+  likehidden = true;
 
   constructor(private http: HttpClient, private authService: UsersAuthService, private aFService: ActivityFeedService) {}
 
@@ -30,26 +31,25 @@ export class ActivityFeedComponent implements OnInit {
                         this.isUserAuthenticated = isAuthenticated;
                         this.userEmail = this.authService.getUserEmail();
                       });
-    // this.aFService.getActivityFeed(this.userEmail);
-    // this.photoSub = this.aFService
-    //                 .getPhotoUpdatedListener()
-    //                 .subscribe((photos: any) =>{
-    //                   this.photos = photos;
-    //                 })
+    this.aFService.getActivityFeed(this.userEmail);
+    this.photoSub = this.aFService
+                    .getPhotoUpdatedListener()
+                    .subscribe((photos: any) => {
+                      this.photos = photos;
+                    });
   }
 
-  likePost(event: Event, photo: any) {
+  likePost(event: Event, id: number) {
     const buttonVal = event.target as HTMLInputElement;
 
     if (buttonVal.innerHTML === 'LIKE' ) {
       buttonVal.innerHTML = 'UNLIKE';
       buttonVal.style.color = 'red';
-      // this.aFService.likePost(this.userEmail, photo);
+      this.aFService.likePost(this.userEmail, id);
     } else {
       buttonVal.innerHTML = 'LIKE';
       buttonVal.style.color = 'indigo';
-      // this.aFService.unlikePost(this.userEmail, photo);
+      this.aFService.unlikePost(this.userEmail, id);
     }
   }
-
 }

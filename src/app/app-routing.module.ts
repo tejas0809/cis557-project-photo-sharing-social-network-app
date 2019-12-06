@@ -13,6 +13,7 @@ import { UserAuthGuard } from './profile-page/user-list/userauth.guard';
 import { ExploreComponent } from './profile-page/explore/explore.component';
 import { FollowersComponent } from './profile-page/followers/followers.component';
 import { FollowingComponent } from './profile-page/following/following.component';
+import { EditProfileComponent } from './profile-page/edit-profile/edit-profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -27,7 +28,7 @@ const routes: Routes = [
       {
         path: 'myprofile',
         component: ProfileComponent,
-        canActivate: [UserAuthGuard]
+        canActivate: [UserAuthGuard],
       },
       {
         path: 'photoUpload',
@@ -52,6 +53,11 @@ const routes: Routes = [
       {
         path: 'activityfeed',
         component: ActivityFeedComponent,
+        canActivate: [UserAuthGuard]
+      },
+      {
+        path: 'editprofile',
+        component: EditProfileComponent,
         canActivate: [UserAuthGuard]
       }
   ]},

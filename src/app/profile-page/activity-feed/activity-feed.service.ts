@@ -13,18 +13,19 @@ export class ActivityFeedService {
 
   getActivityFeed(email: string) {
     this.http
-    .get<{message: string, photos: any, users: any}>('http://localhost:3000/api/user/activityfeed' + email)
+    .get<{message: string, users: any}>('http://localhost:3000/api/user/activityfeed/' + email)
     .pipe(
       map(photoData => {
-        return photoData.photos.map(photo => {
+        return photoData.users.map(photo => {
           return {
-            userEmail: photo.users.email,
-            fname: photo.users.fname,
-            lname: photo.users.lname,
-            profileImagePath: photo.users.profileimagePath,
+            userEmail: photo.email,
+            fname: photo.fname,
+            lname: photo.lname,
+            profileImagePath: photo.profileimagePath,
             imagePath: photo.imagePath,
             caption: photo.caption,
-            id: photo.id
+            id: photo.id,
+            flag: photo.flag
           };
         });
       })
@@ -36,6 +37,32 @@ export class ActivityFeedService {
 
   getPhotoUpdatedListener() {
     return this.photosUpdated.asObservable();
+  }
+
+  likePost(email: string, id: number) {
+    const user = {email};
+    this.http
+    .post<{message: string}>
+    ('http://localhost:3000/api/post/like/' + id,
+    user)
+    .subscribe( res => {
+      console.log('Liked', res);
+      if (res.message === 'success') {
+        console.log('Liked Post Successfully');
+      }
+    });
+  }
+
+  unlikePost(email: string, id: number) {
+    this.http
+    .delete<{message: string}>
+    ('http://localhost:3000/api/post/unlike/' + id + '&' + email)
+    .subscribe( res => {
+      console.log('Unliked', res);
+      if (res.message === 'success') {
+        console.log('UnLiked Post Successfully');
+      }
+    });
   }
 
 }

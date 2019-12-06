@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
 <mat-card>
   <mat-card-header>
     <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
@@ -13,7 +13,8 @@
     </p>
   </mat-card-content>
   <mat-card-actions align='center'>
-      <button mat-button (click)="likePost($event)" color='primary'>LIKE</button>
+      <button mat-button (click)="likePost($event)" color='primary' *ngIf="0">LIKE</button>
+      <button mat-button (click)="likePost($event)" color='accent' *ngIf="likehidden">UNLIKE</button>
   </mat-card-actions>
 </mat-card>
 </div>
@@ -35,7 +36,7 @@
         <button mat-button>LIKE</button>
         <button mat-button>SHARE</button>
       </mat-card-actions>
-    </mat-card>
+    </mat-card> -->
 
 <div *ngIf = "photos.length > 0">
 <mat-card  *ngFor="let photo of photos">
@@ -52,7 +53,8 @@
    </p>
   </mat-card-content>
   <mat-card-actions align='center'>
-      <button mat-button (click)="likePost($event, photo)" color='primary'>LIKE</button>
+    <button mat-button (click)="likePost($event, photo.id)" color='primary' *ngIf="!photo.flag">LIKE</button>
+    <button mat-button (click)="likePost($event, photo.id)" color='accent' *ngIf="photo.flag">UNLIKE</button>
   </mat-card-actions>
 </mat-card>
 </div>
