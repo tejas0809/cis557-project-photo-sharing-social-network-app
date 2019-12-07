@@ -3,7 +3,6 @@ const router = express.Router();
 const multer = require("multer");
 //const db = require('../models/database');
 const db = require('../models/database');
-const checkAuth = require("../middleware/check-auth");
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -33,19 +32,15 @@ const storage = multer.diskStorage({
 
 router.get('/:id', (req,res) => getPost(req,res));
 router.get('/user/:email', (req, res) => getPostsOfUser(req,res));
-// router.post('/user/:email', multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
-// router.post('/like/:id' , (req,res) => likePost(req,res));
-// router.delete('/unlike/:id',(req,res) => unlikePost(req,res));
+router.post('/user/:email', multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
+router.post('/like/:id' , (req,res) => likePost(req,res));
+router.delete('/unlike/:id',(req,res) => unlikePost(req,res));
 router.put('/:id',(req,res) => editPost(req,res));
 router.post('/comment/:id',(req,res) => addComment(req,res));
 router.get('/comments/:id',(req,res) => getComments(req,res));
 router.put('/comment/:id',(req,res) => editComment(req,res));
 router.delete('comment/:id',(req,res) => deleteComment(req,res));
 router.delete('/:id',(req,res) => deletePost(req,res));
-router.post('/user/:email', checkAuth, multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
-router.post('/like/:id' , checkAuth, (req,res) => likePost(req,res));
-router.delete('/unlike/:id&:email',checkAuth, (req,res) => unlikePost(req,res));
-
 
 function getPostsOfUser(req, res) {
   console.log("Get all posts of a user");
@@ -122,7 +117,6 @@ function getPost(req,res) {
 
 function likePost(req,res){
   console.log("like a post");
-
   const values=[req.body.email,req.params.id];
   const sql="insert into Likes (email, postId) values (?,?)";
   db.query(sql,values,function(err,result){
@@ -140,7 +134,7 @@ function likePost(req,res){
 
 function unlikePost(req,res){
   console.log("unlike a post");
-  const values=[req.params.email,req.params.id];
+  const values=[req.body.email,req.params.id];
   const sql="delete from Likes where email=? and postId=?";
   db.query(sql,values,function(err,result){
     if(err){

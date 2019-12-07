@@ -29,6 +29,10 @@ webapp.use((req, res, next) => {
 
 webapp.use("/api/user", userRoutes);
 webapp.use('/api/post',postRoutes);
+webapp.use(express.static('backend/documentation'));
 
+webapp.get('/', function (req, res) {
+res.sendFile(__dirname + 'backend/documentation/index.html');
+});
 
 module.exports = webapp;
