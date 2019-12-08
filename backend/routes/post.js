@@ -177,9 +177,14 @@ function addComment(req,res){
       return;
     }
     // const id1=result.insertId;
+    const retComment={
+      cid=result.insertId,
+      email:req.body.email,
+      content:req.body.content
+    }
     res.json({
       message:'success',
-      c_id:result.insertId
+      comment:retComment
     });
   });
 }
