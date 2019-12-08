@@ -54,7 +54,7 @@ router.delete('/unfollow/:email1&:email2',(req, res) => unfollowUser(req,res));
 
 function getAllUsers(req,res) {
   console.log('READ all users');
-  const sql = 'select * from Users';
+  const sql = 'select * from users';
   const params = [];
   db.query(sql, params, (err, rows) => {
     if (err) {
@@ -71,7 +71,7 @@ function getAllUsers(req,res) {
 
 function  getUser(req, res)  {
   console.log('READ a user by email');
-  const sql = 'select * from Users where email = ?';
+  const sql = 'select * from users where email = ?';
   const params = [req.params.email];
   db.query(sql, params, (err, row) => {
     if (err) {
@@ -109,7 +109,7 @@ function signupNewUser(req, res) {
         bio: req.body.bio
      };
 
-     const insert = 'INSERT INTO Users (email, password, fname, lname, dob, gender, country, city, bio) VALUES (?,?,?,?,?,?,?,?,?)';
+     const insert = 'INSERT INTO users (email, password, fname, lname, dob, gender, country, city, bio) VALUES (?,?,?,?,?,?,?,?,?)';
      const values = [newUser.email, password, newUser.fname, newUser.lname, newUser.dob, newUser.gender, newUser.country, newUser.city, newUser.bio ];
 
       db.query(insert, values, function (err, result) {
@@ -138,17 +138,22 @@ function unfollowUser(req,res){
   };
   console.log("User unfollowing another user");
 
-  const sqlDelete = 'Delete from Follows where email1 = ? and email2 = ?';
+  const sqlDelete = 'Delete from follows where email1 = ? and email2 = ?';
   const values = [follow.user1, follow.user2];
-  console.log(values);
+  // console.log(values);
   db.query(sqlDelete, values, function (err, result) {
+    console.log(result)
     if (err) {
       console.log(err);
       res.status(400).json({ message: err.message });
       return;
     }
+    if(result.affectedRows==0){
+      res.status(400).json({message:"No Change!"})
+      return
+    }
     res.status(200).json({
-      message: 'success',
+      message: 'successfully deleted',
     });
   });
 }
@@ -159,7 +164,7 @@ function followUser(req,res) {
     user2: req.params.email
   };
 
-  const insert = 'INSERT INTO Follows (email1, email2) VALUES (?,?)';
+  const insert = 'INSERT INTO follows (email1, email2) VALUES (?,?)';
   const values = [follow.user1, follow.user2];
   console.log("user following another user")
   db.query(insert, values, function (err, result) {
@@ -179,12 +184,12 @@ function followUser(req,res) {
 }
 
 function loginUser(req, res) {
-  const sql = 'select * from Users where email = ?';
+  const sql = 'select * from users where email = ?';
   const params = [req.body.email, req.body.password];
 
   db.query(sql, params, (err, row) => {
     if (err) {
-      res.status(401).json({ error: 'err: Authentication Failed' });
+      res.status(401).json({ error: 'Authentication Failed' });
       return;
     }
 
@@ -237,7 +242,7 @@ function loginUser(req, res) {
 
 function getFollowers(req, res) {
   console.log("Get all followers of a user");
-  const sql = 'select Users.email,Users.fname, Users.lname, Users.bio, Users.profileimagePath from Follows inner join Users on Users.email=Follows.email1 where Follows.email2 = ?';
+  const sql = 'select users.email,users.fname, users.lname, users.bio, users.profileimagePath from follows inner join users on users.email=follows.email1 where follows.email2 = ?';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
@@ -255,10 +260,10 @@ function getFollowers(req, res) {
 
 function getFollowerCount(req, res) {
   console.log("Get no of followers of a user");
-  const sql = 'select count(*) as count1 from Follows where email2 = ?';
+  const sql = 'select count(*) as count1 from follows where email2 = ?';
   const params = [req.params.email];
 
-  db.query(sql, params, (err, rows  => {
+  db.query(sql, params, (err, rows)  => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -272,7 +277,7 @@ function getFollowerCount(req, res) {
 
 function getFollowingCount(req, res) {
   console.log("Get no of users the current user is following");
-  const sql = 'select count(*) as count1 from Follows where email1 = ?';
+  const sql = 'select count(*) as count1 from follows where email1 = ?';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
@@ -291,7 +296,7 @@ function getFollowingCount(req, res) {
 
 function getFollowing(req, res) {
   console.log("Get all the users which the current user is following");
-  const sql = 'select Users.email,Users.fname, Users.lname, Users.bio, Users.profileimagePath from Follows inner join Users on Users.email=Follows.email2 where Follows.email1 = ?';
+  const sql = 'select users.email,users.fname, users.lname, users.bio, users.profileimagePath from follows inner join users on users.email=follows.email2 where follows.email1 = ?';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
@@ -309,7 +314,7 @@ function getFollowing(req, res) {
 
 function getActivityFeedPosts(req,res){
   console.log("getting posts of the people the current user is following in chronological order");
-  const sql='select p.id as id, p.imagePath as imagePath, p.caption as caption, p.userEmail as email, u.fname as fname, u.lname as lname, u.profileImagePath as profileImagePath, if(likes.likesTimestamp IS NULL, FALSE, TRUE) AS flag from posts p inner join Follows f on p.userEmail=f.email2 and f.email1 = ? inner join users u on u.email=f.email2 left join likes on p.id = likes.postId and f.email1 = likes.email order by p.postTimestamp';
+  const sql='select p.id as id, p.imagePath as imagePath, p.caption as caption, p.userEmail as email, u.fname as fname, u.lname as lname, u.profileImagePath as profileImagePath, if(likes.likesTimestamp IS NULL, FALSE, TRUE) AS flag from posts p inner join follows f on p.userEmail=f.email2 and f.email1 = ? inner join users u on u.email=f.email2 left join likes on p.id = likes.postId and f.email1 = likes.email order by p.postTimestamp';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
@@ -326,7 +331,7 @@ function getActivityFeedPosts(req,res){
 
 function editUserProfile(req,res){
   console.log("editing user profile");
-  const sql='update Users set fname=?, lname=?, bio=?, dob=?, gender=?, country=?, city=?, visibility=? where email=? ';
+  const sql='update users set fname=?, lname=?, bio=?, dob=?, gender=?, country=?, city=?, visibility=? where email=? ';
   const values=[req.body.fname, req.body.lname, req.body.bio, req.body.dob, req.body.gender,req.body.country,req.body.city,req.body.visibility,req.params.email];
   db.query(sql,values,(err,rows) =>{
     if(err){

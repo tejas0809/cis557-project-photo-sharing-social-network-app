@@ -92,7 +92,7 @@ export class UsersAuthService {
       )
       .subscribe(res => {
           this.token = res.token;
-          // console.log(res);
+          console.log(res);
           if (this.token) {
             const expireDuration = res.expiresIn;
             this.setUserAuthTimer(expireDuration);
