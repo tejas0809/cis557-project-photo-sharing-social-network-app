@@ -22,8 +22,8 @@ var con = mysql.createConnection({
       gender VARCHAR(20),
       country VARCHAR(20),
       city VARCHAR(20),
-      profileImagePath VARCHAR(1500),
-      coverImagePath VARCHAR(1500),
+      profileImagePath VARCHAR(1500) default 'http://localhost:3000/images/def_Profile.jpg',
+      coverImagePath VARCHAR(1500) default 'http://localhost:3000/images/def_Cover.jpg',
       visibility VARCHAR(20) default 'public',
       PRIMARY KEY     (email)
     )`,function (err, result, fields) {

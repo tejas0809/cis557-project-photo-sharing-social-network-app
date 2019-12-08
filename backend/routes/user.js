@@ -38,6 +38,8 @@ router.get('/followers/:email',(req,res) => getFollowers(req,res));
 router.get('/followersCount/:email',(req,res) => getFollowerCount(req,res));
 router.get('/followingCount/:email',(req,res) => getFollowingCount(req,res));
 router.get('/activityFeed/:email',(req,res) => getActivityFeedPosts(req,res));
+router.get('/likedPosts/:email',(req,res)=>getLikedPosts(req,res));
+router.get('/explore/:email',(req,res)=>getFollowSuggestions(req,res));
 router.get('/:email', (req, res) => getUser(req, res));
 router.post('/signup', (req, res) => signupNewUser(req,res));
 router.post('/login', (req, res) => loginUser(req,res));
@@ -250,6 +252,22 @@ function getFollowers(req, res) {
   });
 }
 
+function getFollowSuggestions(req,res){
+  console.log("Get follow suggestios for a user");
+  const sql='select email,fname,lname,profileImagePath from users where email not in (select email2 from follows where email1=?)'
+  const params = [req.params.email];
+  db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(200).json({
+      message: 'success',
+      users: rows,
+    });
+  });
+}
+
 
 function getFollowerCount(req, res) {
   console.log("Get no of followers of a user");
@@ -307,7 +325,7 @@ function getFollowing(req, res) {
 
 function getActivityFeedPosts(req,res){
   console.log("getting posts of the people the current user is following in chronological order");
-  const sql='select p.id as id, p.imagePath as imagePath, p.caption as caption, p.userEmail as email, u.fname as fname, u.lname as lname, u.profileImagePath as profileImagePath, if(likes.likesTimestamp IS NULL, FALSE, TRUE) AS flag from posts p inner join Follows f on p.userEmail=f.email2 and f.email1 = ? inner join users u on u.email=f.email2 left join likes on p.id = likes.postId and f.email1 = likes.email order by p.postTimestamp';
+  const sql='select p.id as id, p.imagePath as imagePath, p.caption as caption, p.userEmail as email, u.fname as fname, u.lname as lname, u.profileImagePath as profileImagePath, if(likes.likesTimestamp IS NULL, FALSE, TRUE) AS flag from posts p inner join follows f on p.userEmail=f.email2 and f.email1 = ? inner join users u on u.email=f.email2 left join likes on p.id = likes.postId and f.email1 = likes.email order by p.postTimestamp';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
@@ -318,6 +336,23 @@ function getActivityFeedPosts(req,res){
     res.status(200).json({
       message: 'success',
       users: rows,
+    });
+  });
+}
+
+function getLikedPosts(req,res){
+  console.log("getting posts that the current user has liked");
+  const sql='select posts.id,posts.postTimestamp,posts.imagePath,posts.caption,posts.userEmail,users.fname, users.lname, users.profileImagePath, users.coverImagePath from posts inner join likes on posts.id=likes.postId inner join users on posts.userEmail=users.email where likes.email like ?';
+  const params = [req.params.email];
+
+  db.query(sql, params, (err, rows) => {
+    if (err) {
+      res.status(404).json({ message: err.message });
+      return;
+    }
+    res.status(200).json({
+      message: 'success',
+      posts: rows,
     });
   });
 }
