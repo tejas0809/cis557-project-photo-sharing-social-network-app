@@ -1,0 +1,97 @@
+<mat-card>
+  <mat-horizontal-stepper labelPosition='bottom' #stepper>
+    <mat-step>
+        <form [formGroup] = "form" *ngIf='isUserAuthenticated && userInfo'>
+        <ng-template matStepLabel>Edit Personal Details</ng-template>
+          <mat-form-field>
+              <input matInput placeholder="Email Address" disabled [value]="userEmail">
+          </mat-form-field>
+
+          <mat-form-field>
+              <input matInput placeholder="First Name" formControlName="fname" [value] = 'userInfo.fname' >
+          </mat-form-field>
+
+          <mat-form-field>
+              <input matInput placeholder="Last Name" formControlName="lname" [value]="userInfo.lname">
+          </mat-form-field>
+
+          <mat-form-field>
+              <input matInput [matDatepicker]="picker" formControlName="dob"  placeholder="Date of Birth" [value]='userInfo.dob'>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field >
+              <mat-label>Gender</mat-label>
+              <mat-select formControlName="gender">
+
+                <mat-option value='male'>
+                  Male
+                </mat-option>
+
+                <mat-option value='female'>
+                  Female
+                </mat-option>
+
+                <mat-option value='other'>
+                    Other
+                </mat-option>
+
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="Country Name" [value]="userInfo.country" formControlName="country">
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="City Name" [value]="userInfo.city" formControlName="city">
+            </mat-form-field>
+
+            <mat-form-field>
+                <textarea matInput formControlName="bio" [value]='userInfo.bio' placeholder="Bio"></textarea>
+            </mat-form-field>
+            <div>
+                <button mat-raised-button color='accent' type='submit' (click)="onSaveProfile()" [disabled] = "!form.dirty" class="nav-but">Save</button>
+                <button mat-raised-button color='accent' type='button' id='edit' (click) = 'onEditProfile($event)' class="nav-but">Edit</button>
+            </div>
+        </form>
+    </mat-step>
+
+    <mat-step>
+        <form [formGroup]="profileForm">
+          <ng-template matStepLabel>Change Profile Photo</ng-template>
+          <div class='photo-img'>
+              <button mat-stroked-button type='button' (click)='profilefileUploader.click()'> Pick a Profile Image </button>
+              <input type='file' #profilefileUploader class="img-uploader" (change)="onSelectProfileImage($event)">
+          </div>
+
+          <div class="img-preview" *ngIf="profileImagePreview !=='' && profileImagePreview && profileForm.get('profileimage').valid">
+              <img [src]="profileImagePreview" alt="Photo">
+            </div>
+        </form>
+
+        <div align="center">
+            <button mat-raised-button color="accent" *ngIf="profileshowContent" type='submit' (click)="uploadProfileImage()">Set Profile Image</button>
+        </div>
+    </mat-step>
+
+    <mat-step>
+        <form [formGroup]="coverForm">
+        <ng-template matStepLabel>Change Cover Photo</ng-template>
+            <div class='photo-img'>
+                <button mat-stroked-button type='button' (click)='coverfileUploader.click()'> Pick a Cover Image </button>
+                <input type='file' #coverfileUploader class="img-uploader" (change)="onSelectCoverImage($event)">
+            </div>
+
+            <div class="img-preview" *ngIf="coverImagePreview !=='' && coverImagePreview && coverForm.get('coverimage').valid">
+                <img [src]="coverImagePreview" alt="Photo">
+              </div>
+          </form>
+
+          <div align="center">
+              <button mat-raised-button color="accent" *ngIf="covershowContent" type='submit' (click)="uploadCoverImage()">Set Cover Image</button>
+          </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+  </mat-card>

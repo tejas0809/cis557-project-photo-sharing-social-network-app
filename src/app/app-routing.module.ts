@@ -13,12 +13,13 @@ import { UserAuthGuard } from './profile-page/user-list/userauth.guard';
 import { ExploreComponent } from './profile-page/explore/explore.component';
 import { FollowersComponent } from './profile-page/followers/followers.component';
 import { FollowingComponent } from './profile-page/following/following.component';
-import { EditProfileComponent } from './profile-page/edit-profile/edit-profile.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
+  {path: 'editprofile', component: EditProfileComponent},
   {path: 'profile', component: ProfilePageComponent, children: [
       {
         path: '',
@@ -54,13 +55,8 @@ const routes: Routes = [
         path: 'activityfeed',
         component: ActivityFeedComponent,
         canActivate: [UserAuthGuard]
-      },
-      {
-        path: 'editprofile',
-        component: EditProfileComponent,
-        canActivate: [UserAuthGuard]
       }
-  ]},
+  ]}
 ];
 
 @NgModule({

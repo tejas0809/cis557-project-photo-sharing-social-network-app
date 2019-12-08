@@ -5,6 +5,7 @@ import { AuthData } from './auth-data.model';
 import { Subject } from 'rxjs';
 import { UsersService } from './users.service';
 import { User } from './user.model';
+import { DatePipe, formatDate } from '@angular/common';
 
 @Injectable()
 export class UsersAuthService {
@@ -17,11 +18,17 @@ export class UsersAuthService {
 
   constructor(private http: HttpClient, private router: Router, private userService: UsersService) {}
 
-  createUser(email: string, password: string, fname: string, lname: string, dob: string, gender: string,
+  createUser(email: string, password: string, fname: string, lname: string, dob: Date, gender: string,
              country: string, city: string, bio: string) {
               // const userData = new FormData();
               const profFileName = email + 'profile';
-
+              let dobnew = null;
+              if (dob) {
+                const format = 'yyyy-MM-dd';
+                const locale = 'en-US';
+                dobnew = formatDate(dob, format, locale);
+                console.log('DobNew:', dobnew);
+              }
               // userData.append('email', email);
               // userData.append('password', password);
               // userData.append('fname', fname);
@@ -37,7 +44,7 @@ export class UsersAuthService {
                 password,
                 fname,
                 lname,
-                dob,
+                dob: dobnew,
                 gender,
                 country,
                 city,
@@ -80,11 +87,11 @@ export class UsersAuthService {
 
   login(email: string, password: string) {
     const authData: AuthData = { email, password};
-    this.loginAllow = sessionStorage.getItem('loginallowed')
-    if(!this.loginAllow){
+    this.loginAllow = sessionStorage.getItem('loginallowed');
+    if (!this.loginAllow) {
       this.loginAllow = '1';
     }
-    if(this.loginAllow !== 'false') {
+    if (this.loginAllow !== 'false') {
     this.http
       .post<{ token: string; expiresIn: number, email: string, message: string }>(
         'http://localhost:3000/api/user/login',

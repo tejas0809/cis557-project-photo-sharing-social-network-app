@@ -8,7 +8,7 @@ export class FollowersService {
 
   getFollowers(email: string) {
     return this.http
-    .get<{message: string, users: any}>('http://localhost:3000/api/user/followers/' + email);
+    .get<{message: string, followers: any}>('http://localhost:3000/api/user/followers/' + email);
   }
 
   getFollowersCount(email: string) {

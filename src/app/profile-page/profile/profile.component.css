@@ -77,3 +77,11 @@ mat-card{
 mat-card-content {
   margin-top: 1em;
 }
+
+.hide-form {
+  display: none;
+}
+
+.style-form {
+  width: 100%;
+}

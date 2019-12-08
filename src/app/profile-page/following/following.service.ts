@@ -13,21 +13,15 @@ export class FollowingService {
 
   getFollowing(email: string) {
     return this.http
-    .get<{message: string, users: any}>('http:localhost:3000/api/user/following' + email)
+    .get<{message: string, following: any}>('http://localhost:3000/api/user/following/' + email)
     .pipe(
       map(followingData => {
-        return followingData.users.map(followng => {
+        return followingData.following.map(followng => {
           return {
             email: followng.email,
             fname: followng.fname,
             lname: followng.lname,
-            dob: followng.dob,
-            gender: followng.gender,
-            country: followng.country,
-            city: followng.city,
-            bio: followng.bio,
-            profileImagePath: followng.profileimagePath,
-            coverImagePath: followng.coverImagePath
+            profileImagePath: followng.profileimagePath
           };
       });
       })
@@ -66,8 +60,12 @@ export class FollowingService {
     });
   }
 
-  // getFollowingCount(email: string) {
-  //   return this.http
-  //   .get<{message: string, followerCount: number}>('http://localhost:3000/api/user/followingCount/' + email);
-  // }
+  getFollowingListener() {
+    return this.followingUpdated.asObservable();
+  }
+
+  getFollowingCount(email: string) {
+    return this.http
+    .get<{message: string, followingCount: number}>('http://localhost:3000/api/user/followingCount/' + email);
+  }
 }

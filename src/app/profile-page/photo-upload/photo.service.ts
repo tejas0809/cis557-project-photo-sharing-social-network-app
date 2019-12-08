@@ -61,4 +61,23 @@ export class PhotosService {
   getPhotoUpdateListener() {
     return this.photoUpdated.asObservable();
   }
+
+  editPhoto(postid: number, caption: string){
+    console.log('PostId:', postid, 'Caption', caption);
+
+    const captionBody = {caption};
+    this.http
+    .put<{message: string}>(
+      'http://localhost:3000/api/post/' + postid,
+      captionBody
+    ).subscribe( res => {
+      if (res.message === 'success') {
+        console.log('Post Updated Successfully');
+      }
+    });
+  }
+
+  deletePhoto(postid: number) {
+    return this.http.delete('http://localhost:3000/api/post/' + postid);
+  }
 }

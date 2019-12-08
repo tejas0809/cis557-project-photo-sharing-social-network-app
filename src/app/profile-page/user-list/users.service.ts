@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { User } from './user.model';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { formatDate } from '@angular/common';
 
 @Injectable()
 export class UsersService {
@@ -53,4 +54,58 @@ export class UsersService {
     return this.userUpdated.asObservable();
   }
 
+  editUser(email: string, fname: string, lname: string, dob: Date, gender: string, country: string, city: string, bio: string) {
+      // console.log(fname,':', lname,':', dob,':',gender,':', country,':',city,':',bio)
+
+      let dobnew = null;
+      if (dob) {
+        const format = 'yyyy-MM-dd';
+        const locale = 'en-US';
+        dobnew = formatDate(dob, format, locale);
+      }
+      const userData = {
+        fname,
+        lname,
+        dob: dobnew,
+        gender,
+        country,
+        city,
+        bio
+      };
+
+      this.http
+      .put<{message: string}>('http://localhost:3000/api/user/' + email, userData)
+      .subscribe( res => {
+        if (res.message === 'success') {
+          console.log('User Edited Successfully');
+        }
+      });
+  }
+
+  editProfilePhoto(email: string, profileImage: File) {
+    const profilePhotoData = new FormData();
+    profilePhotoData.append('profileimage', profileImage, email);
+
+    this.http
+    .put<{message: string}>('http://localhost:3000/api/user/editProfile/' + email, profilePhotoData)
+    .subscribe( res => {
+      if (res.message === 'success'){
+        console.log('Profile Photo Edited');
+      }
+    });
+  }
+
+  editCoverPhoto(email: string, coverImage: File) {
+    const coverPhotoData = new FormData();
+    coverPhotoData.append('coverimage', coverImage, email);
+
+    this.http
+    .put<{message: string}>('http://localhost:3000/api/user/editCover/' + email, coverPhotoData)
+    .subscribe( res => {
+      if (res.message === 'success') {
+        console.log('Cover Photo Updated');
+      }
+    });
+
+  }
 }

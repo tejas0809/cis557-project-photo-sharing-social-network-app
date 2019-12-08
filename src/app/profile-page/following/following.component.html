@@ -1,0 +1,15 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>Following</span>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div *ngIf="isUserAuthenticated && followings && followings.length > 0">
+<mat-card *ngFor="let following of followings">
+    <mat-card-header>
+      <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
+      <mat-card-title>{{ following.fname }} {{ following.lname }}</mat-card-title>
+      <mat-card-subtitle>{{following.email}} </mat-card-subtitle>
+      <!-- <button mat-button color='accent' (click)='unfollowUser($event, following.email)'>UNFOLLOW</button> -->
+    </mat-card-header>
+  </mat-card>
+</div>

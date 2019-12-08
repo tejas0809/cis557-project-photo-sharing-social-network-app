@@ -43,7 +43,7 @@ import { FollowingService } from './profile-page/following/following.service';
 import { ActivityFeedService } from './profile-page/activity-feed/activity-feed.service';
 import { LikedPostComponent } from './profile-page/liked-posts/liked-post..component';
 import { LikedPostsService } from './profile-page/liked-posts/liked-posts.service';
-import { EditProfileComponent } from './profile-page/edit-profile/edit-profile.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { AuthInterceptor } from './profile-page/user-list/user-auth.interceptor';
 
 @NgModule({

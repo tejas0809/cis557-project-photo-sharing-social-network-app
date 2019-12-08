@@ -7,6 +7,8 @@ import { Photo } from '../photo-upload/photo.model';
 import { PhotosService } from '../photo-upload/photo.service';
 import { FollowersService } from '../followers/followers.service';
 import { FollowingService } from '../following/following.service';
+import { FormGroup, FormControl } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +21,7 @@ export class ProfileComponent implements OnInit {
   userInfo: User;
   userAuthSub: Subscription;
   postSub: Subscription;
+  editCaptionForm: FormGroup;
   isUserAuthenticated = false;
   posts: Photo[] = [];
   followerCount = 0;
@@ -53,7 +56,112 @@ export class ProfileComponent implements OnInit {
         this.followerCount = res.followerCount;
       }
     });
+    this.followingService.getFollowingCount(this.userEmail).subscribe(res => {
+      this.followingCount = res.followingCount;
+    });
 
-    // this.followerCount = this.followingService.getFollowingCount();
+    this.editCaptionForm = new FormGroup({
+      caption: new FormControl(null, {
+        validators: []
+      })
+    });
+  }
+
+  showForm(postid: number, postcontent: string) {
+
+    const idName: string = 'photo' + postid;
+    const captionContentId = 'caption' + postid;
+    const formContentId = 'formtext' + postid;
+    const backButtonId = 'back' + postid;
+    const editButtonId = 'edit' + postid;
+
+    const formVisibility = document.getElementById(idName);
+    formVisibility.classList.remove('hide-form');
+
+    const captionEle = document.getElementById(captionContentId);
+    const captionContent = captionEle.innerHTML;
+
+    const formText = document.getElementById(formContentId) as HTMLInputElement;
+    formText.value = captionContent;
+    formText.focus();
+
+    const backButton = document.getElementById(backButtonId);
+    backButton.classList.remove('hide-form');
+
+    const editButton = document.getElementById(editButtonId);
+
+    captionEle.style.display = 'none';
+    editButton.style.display = 'none';
+
+  }
+
+  backForm(postid: number) {
+
+    const editButtonId = 'edit' + postid;
+    const captionContentId = 'caption' + postid;
+    const idName = 'photo' + postid;
+    const backButtonId = 'back' + postid;
+
+    const editButton = document.getElementById(editButtonId);
+    editButton.style.display = '';
+
+    const captionEle = document.getElementById(captionContentId);
+    captionEle.style.display = '';
+
+    const formVisibility = document.getElementById(idName);
+    formVisibility.classList.add('hide-form');
+
+    const backButton = document.getElementById(backButtonId);
+    // backButton.classList.remove('hide-form');
+
+    backButton.classList.add('hide-form');
+  }
+
+  editForm(postid: number ) {
+    const saveButtonId = 'save' + postid;
+    const backButtonId = 'back' + postid;
+
+    const saveButton = document.getElementById(saveButtonId);
+    saveButton.classList.remove('hide-form');
+
+    const backButton = document.getElementById(backButtonId);
+    backButton.classList.add('hide-form');
+  }
+
+  saveForm(postid: number) {
+    const saveButtonId = 'save' + postid;
+    const formContentId = 'formtext' + postid;
+    const editButtonId = 'edit' + postid;
+    const captionContentId = 'caption' + postid;
+    const idName = 'photo' + postid;
+
+    const saveButton = document.getElementById(saveButtonId);
+    saveButton.classList.add('hide-form');
+
+    const editButton = document.getElementById(editButtonId);
+    editButton.style.display = '';
+
+    const captionEle = document.getElementById(captionContentId);
+
+    if (this.editCaptionForm.invalid) {
+      return;
+    }
+
+    const formText = document.getElementById(formContentId) as HTMLInputElement;
+    const captionContent = formText.value;
+
+    const formVisibility = document.getElementById(idName);
+    formVisibility.classList.add('hide-form');
+
+    captionEle.style.display = '';
+    captionEle.innerHTML = captionContent;
+
+    this.photoService.editPhoto(postid, captionContent);
+  }
+
+  onDelete(postId: number) {
+    this.photoService.deletePhoto(postId).subscribe(() => {
+      this.photoService.getPhotos(this.userEmail);
+    });
   }
 }

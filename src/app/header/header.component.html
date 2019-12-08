@@ -3,6 +3,7 @@
   <span [routerLink]="['/']" > PixaGram</span>
   <span class='fill-space'></span>
 
-  <a mat-button class='login-space' routerLink='/login' routerLinkActive="mat-accent" >Login</a>
-  <a mat-button routerLink='/register' routerLinkActive="mat-accent" >Register</a>
+  <a mat-button class='login-space' routerLink='/login' *ngIf="!isUserAuthenticated" routerLinkActive="mat-accent" >Login</a>
+  <a mat-button routerLink='/register' *ngIf="!isUserAuthenticated" routerLinkActive="mat-accent" >Register</a>
+  <a mat-button routerLink='/profile' *ngIf='isUserAuthenticated' routerLinkActive='mat-accent' >My Profile</a>
 </mat-toolbar>

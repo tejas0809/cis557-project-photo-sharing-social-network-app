@@ -5,13 +5,13 @@ var con = mysql.createConnection({
   host: '127.0.0.1',
   port: '3306',
   user: 'root',
-  password: 'kanika123',
+  password: 'password',
   database: DB_NAME
   });
   con.connect(function(err) {
     if (err) throw err;
     //Select all customers and return the result object:
-    con.query(`CREATE TABLE IF NOT EXISTS Users
+    con.query(`CREATE TABLE IF NOT EXISTS users
     (
       email VARCHAR(150) NOT NULL,
       password VARCHAR(200) NOT NULL,
@@ -31,7 +31,7 @@ var con = mysql.createConnection({
       console.log(result);
     });
 
-    con.query(`CREATE TABLE IF NOT EXISTS Posts
+    con.query(`CREATE TABLE IF NOT EXISTS posts
     (
       id INT unsigned NOT NULL AUTO_INCREMENT,
       postTimestamp timestamp default current_timestamp NOT NULL,
@@ -49,7 +49,7 @@ var con = mysql.createConnection({
     });
 
 
-    con.query(`CREATE TABLE IF NOT EXISTS Tags(
+    con.query(`CREATE TABLE IF NOT EXISTS tags(
       post_id int(10) unsigned NOT NULL,
       email VARCHAR(150) NOT NULL,
       PRIMARY KEY(post_id,email),
@@ -61,7 +61,7 @@ var con = mysql.createConnection({
     });
 
 
-    con.query(`CREATE TABLE IF NOT EXISTS Follows
+    con.query(`CREATE TABLE IF NOT EXISTS follows
     (
       email1 VARCHAR(150) NOT NULL,
       email2 VARCHAR(150) NOT NULL,
@@ -75,7 +75,7 @@ var con = mysql.createConnection({
   });
 
 
-  con.query(`CREATE TABLE IF NOT EXISTS Comments(
+  con.query(`CREATE TABLE IF NOT EXISTS comments(
     commentId int(10) unsigned NOT NULL AUTO_INCREMENT,
     post_id int(10) unsigned NOT NULL,
     email VARCHAR(150) NOT NULL, content varchar(4000) NOT NULL,
@@ -90,7 +90,7 @@ var con = mysql.createConnection({
     console.log(result);
   });
 
-    con.query(`CREATE TABLE IF NOT EXISTS Likes
+    con.query(`CREATE TABLE IF NOT EXISTS likes
     (
     email VARCHAR(150) NOT NULL,
     postId INT unsigned NOT NULL,
