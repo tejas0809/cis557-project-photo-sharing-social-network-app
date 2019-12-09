@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UsersAuthService } from '../profile-page/user-list/usersauth.service';
+// import { MyDialogComponent } from '../my-dialog/my-dialog.component';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+// import { MatDialog } from '@angular/material/dialog';
+import { MyDialogComponent } from '../my-dialog/my-dialog.component';
 
 @Component({
   selector: 'app-register',
@@ -33,7 +37,7 @@ export class RegisterComponent implements OnInit {
   // Used for confirm password validator
   matcher = new MyErrorStateMatcher();
 
-  constructor(public authUserService: UsersAuthService) {}
+  constructor(public authUserService: UsersAuthService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.userCredentials = new FormGroup({
@@ -124,8 +128,22 @@ export class RegisterComponent implements OnInit {
             '';
   }
 
+  openDialog(): void { 
+    const dialogRef = this.dialog.open(MyDialogComponent, {
+      data:{
+        myMessage:"Invalid fields. Please Try again!",
+        myTitle:"Registration Failed"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+  
   submitForm() {
     if (this.userCredentials.invalid || this.personalDetails.invalid) {
+      this.openDialog();
       return;
     }
 

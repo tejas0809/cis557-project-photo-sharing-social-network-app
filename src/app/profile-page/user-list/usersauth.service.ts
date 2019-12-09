@@ -6,6 +6,8 @@ import { Subject } from 'rxjs';
 import { UsersService } from './users.service';
 import { User } from './user.model';
 import { DatePipe, formatDate } from '@angular/common';
+import { MyDialogComponent } from 'src/app/my-dialog/my-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable()
 export class UsersAuthService {
@@ -16,7 +18,7 @@ export class UsersAuthService {
   private userAuthStatusListener = new Subject<boolean>();
   private loginAllow: any;
 
-  constructor(private http: HttpClient, private router: Router, private userService: UsersService) {}
+  constructor(private http: HttpClient, private router: Router, private userService: UsersService, public dialog: MatDialog) {}
 
   createUser(email: string, password: string, fname: string, lname: string, dob: Date, gender: string,
              country: string, city: string, bio: string) {
@@ -82,6 +84,18 @@ export class UsersAuthService {
                   this.userService.addUser(newUser);
                   this.router.navigate(['/login']);
                 }
+              }, res => {
+                if(res.error.message === "User Already Exists! Select new email or login with existing one!"){
+                  const dialogRef = this.dialog.open(MyDialogComponent, {
+                    data:{
+                      myMessage:"User Already Exists! Select new email or login with existing one!",
+                      myTitle:"Failed"
+                    }
+                  });
+                  dialogRef.afterClosed().subscribe(result => {
+                    console.log('The dialog was closed');
+                  });
+                }
               });
              }
 
@@ -115,7 +129,15 @@ export class UsersAuthService {
       res => {
         if (res.error.message === 'Authentication Failed') {
           let mislogin = sessionStorage.getItem('loginfailed');
-
+          const dialogRef = this.dialog.open(MyDialogComponent, {
+            data:{
+              myMessage:"Invalid email and password combination. Try again!",
+              myTitle:"Login Failed"
+            }
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+          });
           if (!mislogin) {
             sessionStorage.setItem('loginfailed', '0');
           }
@@ -125,6 +147,16 @@ export class UsersAuthService {
           let mislogno = parseInt(mislogin, 10);
           console.log('mislogno:', mislogno);
           if (mislogno > 6) {
+            //
+            const dialogRef = this.dialog.open(MyDialogComponent, {
+              data:{
+                myMessage:"Exceed Maximum failed login attempts!",
+                myTitle:"Account Locked"
+              }
+            });
+            dialogRef.afterClosed().subscribe(result => {
+              console.log('The dialog was closed');
+            });
             console.log('Exceeded Maximum failed login attempts');
             sessionStorage.setItem('loginallowed', false.toString());
           }
