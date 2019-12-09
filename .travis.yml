@@ -7,8 +7,11 @@ install:
   - npm install
   
   
-  
+services:
+  - mysql
+
 script:
+  - mysqldump -uroot -p='' pixagram < pixagram_testdb.sql
   - npm test
    
 
