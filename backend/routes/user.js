@@ -252,9 +252,9 @@ function getFollowers(req, res) {
   });
 }
 
-function getFollowSuggestions(req,res){
+function getFollowSuggestions(req,res) {
   console.log("Get follow suggestios for a user");
-  const sql='select email,fname,lname,profileImagePath from users where email not in (select email2 from follows where email1=?)'
+  const sql='select * from users where email not in (select email2 from follows where email1=?)'
   const params = [req.params.email];
   db.query(sql, params, (err, rows) => {
     if (err) {

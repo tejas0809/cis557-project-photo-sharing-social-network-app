@@ -31,7 +31,7 @@ export class ExploreComponent implements OnInit {
                     this.userEmail = this.authUserService.getUserEmail();
                   });
 
-    this.userService.getUsers();
+    this.userService.exploreUsers(this.userEmail);
     this.userSub = this.userService.getUserUpdatedlistener()
     .subscribe((users: User[]) => {
       this.otherUsers = users.filter(item => item.email !== this.userEmail);

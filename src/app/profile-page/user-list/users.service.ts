@@ -38,6 +38,32 @@ export class UsersService {
     });
   }
 
+  exploreUsers(email: string) {
+    this.http
+    .get<{message: string, users: any}>('http://localhost:3000/api/user/explore/' + email)
+    .pipe(
+      map(userData => {
+        return userData.users.map(user => {
+          return {
+            email: user.email,
+            fname: user.fname,
+            lname: user.lname,
+            dob: user.dob,
+            gender: user.gender,
+            country: user.country,
+            city: user.city,
+            bio: user.bio,
+            profileimagePath: user.profileImagePath,
+            coverimagePath: user.coverImagePath
+          };
+        });
+      })
+    ).subscribe(updatedUser => {
+      this.users = updatedUser;
+      this.userUpdated.next([...this.users]);
+    });
+  }
+
   getUser(email: string) {
 
    return this.http.get<{

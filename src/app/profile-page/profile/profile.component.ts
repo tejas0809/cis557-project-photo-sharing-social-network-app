@@ -180,7 +180,7 @@ export class ProfileComponent implements OnInit {
       imagePath: post.imagePath,
       caption: post.caption,
       id: post.id
-    }
+    };
 
     this.commentService.setUserInfo(postInfo);
   }
