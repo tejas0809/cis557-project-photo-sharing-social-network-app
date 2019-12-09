@@ -20,6 +20,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,6 +49,7 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { AuthInterceptor } from './profile-page/user-list/user-auth.interceptor';
 import { CommentsComponent } from './profile-page/comments/comments.component';
 import { CommentsService } from './profile-page/comments/comments.services';
+import { MyDialogComponent } from './my-dialog/my-dialog.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { CommentsService } from './profile-page/comments/comments.services';
     FollowingComponent,
     LikedPostComponent,
     EditProfileComponent,
-    CommentsComponent
+    CommentsComponent,
+    MyDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +95,11 @@ import { CommentsService } from './profile-page/comments/comments.services';
     MatListModule,
     MatSelectModule,
     HttpClientModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDialogModule
+  ],
+  entryComponents:[
+    MyDialogComponent,
   ],
   providers: [UsersAuthService, UsersService, PhotosService, FollowersService, FollowingService, ActivityFeedService, CommentsService,
               LikedPostsService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
 .prof-cover-photo {
   height: 15em;
   width: 100%;
@@ -49,6 +51,7 @@ span{
   background-color: black;
   margin-top: 0;
   text-align: center;
+  font-family: 'Roboto', sans-serif;
   color: white;
 }
 
@@ -72,6 +75,7 @@ mat-card{
   width: 100%;
   font-weight: bold;
   font-size: 1.5vw;
+  font-family: 'Roboto', sans-serif;
 }
 
 mat-card-content {

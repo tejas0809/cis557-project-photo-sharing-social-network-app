@@ -7,21 +7,21 @@ import { UsersAuthService } from './profile-page/user-list/usersauth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'pixagram';
-  hideElement : boolean = false;
+  hideElement = false;
 
   ngOnInit() {
     document.body.style.margin = '0';
     this.authService.autoAuthenticateUser();
   }
 
-  constructor(private router: Router, private authService: UsersAuthService){
+  constructor(private router: Router, private authService: UsersAuthService) {
 
     router.events.forEach((event) => {
-      if(event instanceof NavigationStart){
+      if (event instanceof NavigationStart) {
         console.log(event['url']);
-        if(event['url'].includes('/profile')){
+        if (event['url'].includes('/profile')) {
           this.hideElement = true;
         } else {
           this.hideElement = false;

@@ -55,7 +55,6 @@ export class PhotosService {
         caption: res.post.caption,
         userEmail: res.post.email
       };
-
       this.photos.push(newpost);
       this.photoUpdated.next([...this.photos]);
     });
@@ -83,4 +82,5 @@ export class PhotosService {
   deletePhoto(postid: number) {
     return this.http.delete('http://localhost:3000/api/post/' + postid);
   }
+
 }

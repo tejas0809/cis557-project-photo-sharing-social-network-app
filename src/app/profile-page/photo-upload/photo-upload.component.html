@@ -18,6 +18,13 @@
         <mat-form-field class="img-caption" *ngIf="showContent">
           <textarea matInput rows="4" formControlName="caption" placeholder="Add Image Caption" ></textarea>
         </mat-form-field>
+
+        <!-- <mat-form-field  *ngIf="showContent" class='tagging-field'>
+            <mat-label>Tagging</mat-label>
+            <mat-select formControlName="tagging" multiple>
+              <mat-option *ngFor="let user of users" [value]="user.email">{{user.fname}} {{user.lname}}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
       </form>
     </mat-card-content>
     <mat-card-actions align='center'>

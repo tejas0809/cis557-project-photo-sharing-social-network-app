@@ -1,8 +1,8 @@
 var mysql = require('mysql');
 
-const DB_NAME = 'pixagram';
+const DB_NAME = 'pixagramdb';
 var con = mysql.createConnection({
-  host: '127.0.0.1',
+  host: 'pixagramdb.ccxkiclbondr.us-east-1.rds.amazonaws.com',
   port: '3306',
   user: 'root',
   password: 'password',

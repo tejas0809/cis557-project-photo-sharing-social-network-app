@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     if (isValid) {
       error = null;
     }
-    cb(error, "images");
+    cb(error, "backend/images");
   },
   filename: (req, file, cb) => {
     const name = file.originalname
@@ -342,7 +342,7 @@ function getActivityFeedPosts(req,res){
 
 function getLikedPosts(req,res){
   console.log("getting posts that the current user has liked");
-  const sql='select posts.id,posts.postTimestamp,posts.imagePath,posts.caption,posts.userEmail,users.fname, users.lname, users.profileImagePath, users.coverImagePath from posts inner join likes on posts.id=likes.postId inner join users on posts.userEmail=users.email where likes.email like ?';
+  const sql='select posts.id as id,posts.imagePath,posts.caption,posts.userEmail,users.fname, users.lname, users.profileImagePath from posts inner join likes on posts.id=likes.postId inner join users on posts.userEmail=users.email where likes.email like ?';
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {
