@@ -1,7 +1,7 @@
 #cis557-project-photo-sharing-social-network-app-web-tkn-web
 
 
-App Link: https://damp-oasis-06659.herokuapp.com/profile/myprofile
+App Link: https://damp-oasis-06659.herokuapp.com/ <br>
 Team Name: \<web\>tkn\</web\> <br>
 Team Members: 
 <table>
@@ -27,6 +27,6 @@ Team Members:
    </tr>
   </table>
   
-  Swagger Documentation Link:
+  Swagger Documentation Link: https://damp-oasis-06659.herokuapp.com/swagger/ <br>
   Wiki Page Links:
   
