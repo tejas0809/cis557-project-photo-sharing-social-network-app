@@ -11,15 +11,18 @@ Team Members:
  </tr>
  <tr>
     <td>Nikhil Motwani</td>
+   <td>nmotwani@seas.upenn.edu</td>
     <td>59451134</td>
    </tr>
  <tr>
     <td>Tejas Srivastava</td>
+   <td>tjss@seas.upenn.edu</td>
     <td>14547354</td>
   </tr>
   <tr>
     <td>Kanika Nadkarni</td>
-    <td></td>
+    <td>kanikan@seas.upenn.edu</td>
+    <td>38530465</td>
    </tr>
   </table>
   
