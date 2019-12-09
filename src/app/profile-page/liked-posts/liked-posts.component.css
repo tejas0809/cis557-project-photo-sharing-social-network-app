@@ -1,0 +1,15 @@
+mat-card{
+  width: 25%;
+  margin: 2em;
+}
+
+.flex-container-follow {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+mat-card-content {
+  padding: 1em;
+  margin-bottom: 0;
+}

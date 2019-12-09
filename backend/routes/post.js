@@ -128,11 +128,11 @@ function likePost(req,res){
 
  function addTags(req,res){
   console.log("adding tags to post");
-  const len=req.body.emails.length;
+  const len=req.body.tagging.length;
   // const tot_result=[];
    for(index=0;index<len;index++){
     const values=[req.params.id, req.body.emails[index]];
-    
+
     const sql="insert into tags(post_id,email) values (?,?)";
      db.query(sql,values,function(err,result){
       if(err){

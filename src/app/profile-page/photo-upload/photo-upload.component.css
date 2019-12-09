@@ -29,3 +29,8 @@ mat-card-content .photo-img{
   width: 70%;
   display: block;
 }
+
+.tagging-field {
+  margin:auto;
+  width: 100%;
+}

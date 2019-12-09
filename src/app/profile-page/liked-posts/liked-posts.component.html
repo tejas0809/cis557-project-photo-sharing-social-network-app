@@ -1,0 +1,53 @@
+<!-- <div class="flex-container-follow" *ngIf="likedPost.length > 0">
+    <mat-card *ngFor="let post of likedPost">
+      <img mat-card-image [src]= post.imagePath alt="post.caption">
+      <mat-divider></mat-divider>
+      <mat-card-content>
+          <p>
+            {{post.caption}}
+          </p>
+      </mat-card-content>
+      <mat-card-actions align='center'>
+          <button mat-stroked-button color="accent" (click)="unlikePost($event, post.id)" >UNLIKE</button>
+      </mat-card-actions>
+    </mat-card>
+  </div> -->
+
+
+<!-- <div class="flex-container-follow">
+      <mat-card>
+        <img mat-card-image src= '../../assets/images/bckg-an1.jpg' alt="post.caption">
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <p>
+              Sample Post
+            </p>
+          </mat-card-content>
+        <mat-card-actions align='center'>
+            <button mat-stroked-button color="primary">UNLIKE</button>
+        </mat-card-actions>
+      </mat-card>
+</div> -->
+
+<div *ngIf = "likedPost.length > 0">
+    <mat-card  *ngFor="let photo of likedPost">
+      <mat-card-header>
+        <img mat-card-avatar [src]='photo.profileImagePath'>
+        <mat-card-title>{{photo.fname}} {{photo.lname}}</mat-card-title>
+        <mat-card-subtitle>{{photo.userEmail}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+       <img mat-card-image [src]=photo.imagePath alt="Photo1">
+       <p>
+         {{photo.caption}}
+       </p>
+      </mat-card-content>
+      <mat-card-actions align='center'>
+        <button mat-button (click)="unlikePost($event, photo.id)" color='accent'>UNLIKE</button>
+        <button mat-button color='primary' (click) = 'viewComments(photo)' routerLink = '/profile/comments'>COMMENT</button>
+      </mat-card-actions>
+    </mat-card>
+    </div>
+
+

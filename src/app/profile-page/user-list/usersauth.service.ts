@@ -78,8 +78,8 @@ export class UsersAuthService {
                     country: res.user.country,
                     city: res.user.city,
                     bio: res.user.bio,
-                    profileimagePath: res.user.profileImagepath,
-                    coverimagePath: res.user.coverImagePath
+                    profileImagePath: res.user.profileImagepath,
+                    coverImagePath: res.user.coverImagePath
                   };
                   this.userService.addUser(newUser);
                   this.router.navigate(['/login']);
