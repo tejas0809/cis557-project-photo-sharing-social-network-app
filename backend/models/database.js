@@ -36,7 +36,7 @@ var con = mysql.createConnection({
       id INT unsigned NOT NULL AUTO_INCREMENT,
       postTimestamp timestamp default current_timestamp NOT NULL,
       imagePath VARCHAR(1000) NOT NULL,
-      caption VARCHAR(500),
+      caption VARCHAR(500) DEFAULT '',
       userEmail VARCHAR(150) NOT NULL,
       PRIMARY KEY     (id),
       FOREIGN KEY (userEmail)

@@ -9,7 +9,8 @@
       <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
       <mat-card-title>{{ follower.fname }} {{ follower.lname }}</mat-card-title>
       <mat-card-subtitle>{{follower.email}} </mat-card-subtitle>
-      <!-- <button mat-button color='primary' (click)='followUser($event, follower.email)'>FOLLOW</button> -->
+      <button mat-button color='primary' *ngIf='!follower.flag' (click)='followUser($event, follower.email)'>FOLLOW</button>
+      <button mat-button color='accent' *ngIf='follower.flag' (click)='followUser($event, follower.email)'>UNFOLLOW</button>
     </mat-card-header>
   </mat-card>
 </div>

@@ -62,7 +62,7 @@ export class PhotosService {
     return this.photoUpdated.asObservable();
   }
 
-  editPhoto(postid: number, caption: string){
+  editPhoto(postid: number, caption: string) {
     console.log('PostId:', postid, 'Caption', caption);
 
     const captionBody = {caption};

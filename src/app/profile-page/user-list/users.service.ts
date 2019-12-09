@@ -89,7 +89,7 @@ export class UsersService {
     this.http
     .put<{message: string}>('http://localhost:3000/api/user/editProfile/' + email, profilePhotoData)
     .subscribe( res => {
-      if (res.message === 'success'){
+      if (res.message === 'success') {
         console.log('Profile Photo Edited');
       }
     });

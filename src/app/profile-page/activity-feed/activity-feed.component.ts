@@ -3,6 +3,7 @@ import { UsersAuthService } from '../user-list/usersauth.service';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { ActivityFeedService } from './activity-feed.service';
+import { CommentsService } from '../comments/comments.services';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class ActivityFeedComponent implements OnInit {
   isUserAuthenticated = false;
   likehidden = true;
 
-  constructor(private http: HttpClient, private authService: UsersAuthService, private aFService: ActivityFeedService) {}
+  constructor(private http: HttpClient, private authService: UsersAuthService, private aFService: ActivityFeedService,
+              private commentService: CommentsService) {}
 
   ngOnInit() {
     this.userEmail = this.authService.getUserEmail();
@@ -51,5 +53,9 @@ export class ActivityFeedComponent implements OnInit {
       buttonVal.style.color = 'indigo';
       this.aFService.unlikePost(this.userEmail, id);
     }
+  }
+
+  viewComments(photos: any) {
+    this.commentService.setUserInfo(photos);
   }
 }

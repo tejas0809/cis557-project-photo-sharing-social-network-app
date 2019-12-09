@@ -37,9 +37,9 @@ router.post('/like/:id' , checkAuth, (req,res) => likePost(req,res));
 router.delete('/unlike/:id&:email', checkAuth, (req,res) => unlikePost(req,res));
 router.put('/:id', checkAuth, (req,res) => editPost(req,res));
 router.post('/comment/:id',checkAuth, (req,res) => addComment(req,res));
-router.get('/comments/:id',checkAuth, (req,res) => getComments(req,res));
+router.get('/comments/:id', (req,res) => getComments(req,res));
 router.put('/comment/:id',checkAuth, (req,res) => editComment(req,res));
-router.delete('comment/:id',checkAuth, (req,res) => deleteComment(req,res));
+router.delete('/comment/:id',checkAuth, (req,res) => deleteComment(req,res));
 router.delete('/:id',checkAuth, (req,res) => deletePost(req,res));
 
 function getPostsOfUser(req, res) {
@@ -178,13 +178,13 @@ function addComment(req,res){
     }
     // const id1=result.insertId;
     const retComment={
-      cid=result.insertId,
       email:req.body.email,
       content:req.body.content
     }
     res.json({
       message:'success',
-      comment:retComment
+      comment:retComment,
+      id: result.insertId
     });
   });
 }
@@ -192,7 +192,7 @@ function addComment(req,res){
 function getComments(req,res){
   console.log("getting all comments for a post");
   const values=[req.params.id];
-  const sql='select users.fname, users.lname, comments.content, comments.email, comments.commentsTimestamp from comments inner join users on comments.email=users.email where post_id=? order by comments.commentsTimestamp';
+  const sql='select comments.commentId as id, users.fname, users.lname, comments.content, comments.email, comments.commentsTimestamp from comments inner join users on comments.email=users.email where post_id=? order by comments.commentsTimestamp';
   db.query(sql,values,function(err,result){
     if(err){
       console.log(err);
@@ -210,7 +210,7 @@ function editComment(req,res){
   console.log("editing a comment");
   const values=[req.body.content,req.params.id]
   const sql="update comments set content=? where commentId=?";
-  db.query(sql,values,(err,rows) =>{
+  db.query(sql,values,(err,result) =>{
     if(err){
       res.status(400).json({message:err.message});
       return;

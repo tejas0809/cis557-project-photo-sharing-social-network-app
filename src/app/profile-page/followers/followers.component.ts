@@ -12,7 +12,7 @@ import { FollowingService } from '../following/following.service';
   styleUrls: ['./followers.component.css']
 })
 
-export class FollowersComponent implements OnInit{
+export class FollowersComponent implements OnInit {
   userEmail: string;
   userAuthSub: Subscription;
   isUserAuthenticated: boolean;
@@ -39,7 +39,8 @@ export class FollowersComponent implements OnInit{
             email: follower.email,
             fname: follower.fname,
             lname: follower.lname,
-            profileImagePath: follower.profileImagePath
+            profileImagePath: follower.profileImagePath,
+            flag: follower.flag
           };
         });
       })
@@ -48,17 +49,17 @@ export class FollowersComponent implements OnInit{
     });
   }
 
-  // followUser(event: Event, email: string) {
-  //   const buttonVal = event.target as HTMLInputElement;
-  //   console.log('Button Val:', buttonVal.innerHTML);
-  //   if ( buttonVal.innerHTML === 'FOLLOW') {
-  //     buttonVal.innerHTML = 'UNFOLLOW';
-  //     buttonVal.style.color = 'red';
-  //     this.followingService.followUser(this.userEmail, email);
-  //   } else if (buttonVal.innerHTML === 'UNFOLLOW') {
-  //     buttonVal.innerHTML = 'FOLLOW';
-  //     buttonVal.style.color = 'indigo';
-  //     this.followingService.unfollowUser(this.userEmail, email);
-  //   }
-  // }
+  followUser(event: Event, email: string) {
+    const buttonVal = event.target as HTMLInputElement;
+    console.log('Button Val:', buttonVal.innerHTML);
+    if ( buttonVal.innerHTML === 'FOLLOW') {
+      buttonVal.innerHTML = 'UNFOLLOW';
+      buttonVal.style.color = 'red';
+      this.followingService.followUser(this.userEmail, email);
+    } else if (buttonVal.innerHTML === 'UNFOLLOW') {
+      buttonVal.innerHTML = 'FOLLOW';
+      buttonVal.style.color = 'indigo';
+      this.followingService.unfollowUser(this.userEmail, email);
+    }
+  }
 }

@@ -19,7 +19,7 @@ describe('AppComponent', () => {
   }));
 
   it('Basic Test', () => {
-    expect(1+2).toBe(3);
+    expect(1 + 2).toBe(3);
   });
 
   // it('should create the app', () => {

@@ -9,6 +9,7 @@ import { FollowersService } from '../followers/followers.service';
 import { FollowingService } from '../following/following.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { NgForm } from '@angular/forms';
+import { CommentsService } from '../comments/comments.services';
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +30,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(public authUserService: UsersAuthService, private userService: UsersService,
               private photoService: PhotosService, private followerService: FollowersService,
-              private followingService: FollowingService ) {}
+              private followingService: FollowingService, private commentService: CommentsService ) {}
 
   ngOnInit() {
     this.userEmail = this.authUserService.getUserEmail();
@@ -77,11 +78,18 @@ export class ProfileComponent implements OnInit {
 
     const formVisibility = document.getElementById(idName);
     formVisibility.classList.remove('hide-form');
+    let captionContent;
 
     const captionEle = document.getElementById(captionContentId);
-    const captionContent = captionEle.innerHTML;
+    if (captionEle) {
+      captionContent = captionEle.innerHTML;
+      captionEle.style.display = 'none';
+    } else {
+      captionContent = '';
+    }
 
     const formText = document.getElementById(formContentId) as HTMLInputElement;
+    console.log(formText);
     formText.value = captionContent;
     formText.focus();
 
@@ -90,9 +98,7 @@ export class ProfileComponent implements OnInit {
 
     const editButton = document.getElementById(editButtonId);
 
-    captionEle.style.display = 'none';
     editButton.style.display = 'none';
-
   }
 
   backForm(postid: number) {
@@ -120,7 +126,7 @@ export class ProfileComponent implements OnInit {
   editForm(postid: number ) {
     const saveButtonId = 'save' + postid;
     const backButtonId = 'back' + postid;
-
+    // console.log(saveButtonId);
     const saveButton = document.getElementById(saveButtonId);
     saveButton.classList.remove('hide-form');
 
@@ -163,5 +169,19 @@ export class ProfileComponent implements OnInit {
     this.photoService.deletePhoto(postId).subscribe(() => {
       this.photoService.getPhotos(this.userEmail);
     });
+  }
+
+  viewComments(post: Photo) {
+    const postInfo = {
+      userEmail: this.userEmail,
+      fname: this.userInfo.fname,
+      lname: this.userInfo.lname,
+      profileImagePath: this.userInfo.profileimagePath,
+      imagePath: post.imagePath,
+      caption: post.caption,
+      id: post.id
+    }
+
+    this.commentService.setUserInfo(postInfo);
   }
 }

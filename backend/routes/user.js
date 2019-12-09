@@ -237,8 +237,8 @@ function loginUser(req, res) {
 
 function getFollowers(req, res) {
   console.log("Get all followers of a user");
-  const sql = 'select users.email,users.fname, users.lname, users.profileImagePath from follows inner join users on users.email=follows.email1 where follows.email2 = ?';
-  const params = [req.params.email];
+  const sql = 'select u.email as email, u.fname as fname, u.lname as lname, profileImagePath as profileImagePath, if(g.followsTimestamp iS NULL, FALSE, TRUE) as flag from follows f inner join users u on  u.email = f.email1  left join (select email2 as email, followsTimestamp from follows where email1 = ?) g on g.email = f.email1 where f.email2 =?';
+  const params = [req.params.email, req.params.email];
 
   db.query(sql, params, (err, rows) => {
     if (err) {

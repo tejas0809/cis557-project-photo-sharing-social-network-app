@@ -55,6 +55,7 @@
   <mat-card-actions align='center'>
     <button mat-button (click)="likePost($event, photo.id)" color='primary' *ngIf="!photo.flag">LIKE</button>
     <button mat-button (click)="likePost($event, photo.id)" color='accent' *ngIf="photo.flag">UNLIKE</button>
+    <button mat-button color='primary' (click) = 'viewComments(photo)' routerLink = '/profile/comments'>COMMENT</button>
   </mat-card-actions>
 </mat-card>
 </div>

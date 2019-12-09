@@ -14,6 +14,7 @@ import { ExploreComponent } from './profile-page/explore/explore.component';
 import { FollowersComponent } from './profile-page/followers/followers.component';
 import { FollowingComponent } from './profile-page/following/following.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { CommentsComponent } from './profile-page/comments/comments.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -54,6 +55,11 @@ const routes: Routes = [
       {
         path: 'activityfeed',
         component: ActivityFeedComponent,
+        canActivate: [UserAuthGuard]
+      },
+      {
+        path: 'comments',
+        component: CommentsComponent,
         canActivate: [UserAuthGuard]
       }
   ]}

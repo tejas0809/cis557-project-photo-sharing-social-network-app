@@ -1,0 +1,29 @@
+.comment-container {
+  display: flex;
+}
+
+.box {
+  flex: 50%;
+}
+
+mat-card {
+  width: 50%;
+}
+
+.comment-box {
+  height: 82%;
+  max-height: 33em;
+}
+
+#comment-button {
+  margin-top:0.1em;
+  float: right;
+}
+
+.hide-form {
+  display: none;
+}
+
+.style-form {
+  width: 100%;
+}
