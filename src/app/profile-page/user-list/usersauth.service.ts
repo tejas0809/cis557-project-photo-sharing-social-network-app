@@ -191,7 +191,7 @@ export class UsersAuthService {
       this.userEmail = authInfo.email;
       this.setUserAuthTimer(expiresIn / 1000);
       this.userAuthStatusListener.next(true);
-      // this.router.navigate(['/profile']);
+      this.router.navigate(['/profile']);
     }
   }
 
