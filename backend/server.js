@@ -1,4 +1,4 @@
-const webapp = require('./backend/app');
+const webapp = require('./app');
 const http = require('http');
 const swagger = require('swagger-node-express');
 

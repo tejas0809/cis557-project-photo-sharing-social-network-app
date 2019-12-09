@@ -10,7 +10,8 @@ webapp.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
 webapp.use(bodyParser.json());
-webapp.use('/images', express.static(path.join('backend/images')));
+webapp.use('/images', express.static(path.join(__dirname, 'images')));
+webapp.use('/', express.static(path.join(__dirname, 'pixagram')));
 
 webapp.use((req, res, next) => {
   // console.log('midle:'+JSON.stringify(req.body));
@@ -31,8 +32,12 @@ webapp.use("/api/user", userRoutes);
 webapp.use('/api/post',postRoutes);
 webapp.use(express.static('backend/documentation'));
 
-webapp.get('/', function (req, res) {
+webapp.get('/swagger', function (req, res) {
 res.sendFile(__dirname + 'backend/documentation/index.html');
+});
+
+webapp.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "pixagram", "index.html"))
 });
 
 module.exports = webapp;

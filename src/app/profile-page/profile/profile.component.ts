@@ -176,7 +176,7 @@ export class ProfileComponent implements OnInit {
       userEmail: this.userEmail,
       fname: this.userInfo.fname,
       lname: this.userInfo.lname,
-      profileImagePath: this.userInfo.profileimagePath,
+      profileImagePath: this.userInfo.profileImagePath,
       imagePath: post.imagePath,
       caption: post.caption,
       id: post.id

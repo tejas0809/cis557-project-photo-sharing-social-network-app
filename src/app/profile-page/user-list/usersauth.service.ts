@@ -76,8 +76,8 @@ export class UsersAuthService {
                     country: res.user.country,
                     city: res.user.city,
                     bio: res.user.bio,
-                    profileimagePath: res.user.profileImagepath,
-                    coverimagePath: res.user.coverImagePath
+                    profileImagePath: res.user.profileImagepath,
+                    coverImagePath: res.user.coverImagePath
                   };
                   this.userService.addUser(newUser);
                   this.router.navigate(['/login']);
@@ -159,7 +159,7 @@ export class UsersAuthService {
       this.userEmail = authInfo.email;
       this.setUserAuthTimer(expiresIn / 1000);
       this.userAuthStatusListener.next(true);
-      // this.router.navigate(['/profile']);
+      this.router.navigate(['/profile']);
     }
   }
 
