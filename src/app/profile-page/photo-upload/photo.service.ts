@@ -37,6 +37,9 @@ export class PhotosService {
     const userEmail = this.authService.getUserEmail();
     console.log('image', image);
     photoData.append('image', image, userEmail);
+    if (!caption) {
+      caption = '';
+    }
     photoData.append('caption', caption);
 
     this.http

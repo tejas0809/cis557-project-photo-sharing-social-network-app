@@ -1,5 +1,5 @@
 <div class="prof-cover-photo">
-  <img src='../../../assets/images/bckg-an2.jpg' class="cover-photo">
+  <img *ngIf='isUserAuthenticated && userInfo' [src]='userInfo.coverImagePath' class="cover-photo">
   <p class="bio" *ngIf="isUserAuthenticated && userInfo && userInfo.bio">
     {{ userInfo.bio }}
   </p>

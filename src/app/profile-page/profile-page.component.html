@@ -12,11 +12,13 @@
 
     </mat-toolbar> -->
     <mat-nav-list>
-      <div>
-        <img src='../../assets/images/bckg-an2.jpg' alt='Cover Photo' class="cover-photo">
+      <div *ngIf='isUserAuthenticated && userInfo'>
+        <!-- <img src='../../assets/images/bckg-an2.jpg' alt='Cover Photo' class="cover-photo"> -->
+        <img [src]='userInfo.coverImagePath' alt='Cover Photo' class="cover-photo">
       </div>
 
-      <img src='../../assets/images/bckg-an1.jpg' alt='Profile Photo' class="profile-photo">
+      <!-- <img src='../../assets/images/bckg-an1.jpg' alt='Profile Photo' class="profile-photo"> -->
+      <img *ngIf='isUserAuthenticated && userInfo' [src]='userInfo.profileImagePath' alt='Profile Photo' class="profile-photo">
 
       <span class="profile-name" *ngIf="isUserAuthenticated && userInfo">{{ userInfo.fname }} {{ userInfo.lname }}</span>
       <div class="profile-email" *ngIf="isUserAuthenticated && userInfo">{{ userInfo.email }}</div>

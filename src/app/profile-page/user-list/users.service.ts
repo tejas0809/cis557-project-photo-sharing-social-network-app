@@ -53,8 +53,8 @@ export class UsersService {
             country: user.country,
             city: user.city,
             bio: user.bio,
-            profileimagePath: user.profileImagePath,
-            coverimagePath: user.coverImagePath
+            profileImagePath: user.profileImagePath,
+            coverImagePath: user.coverImagePath
           };
         });
       })

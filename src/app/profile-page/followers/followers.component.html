@@ -6,7 +6,7 @@
 <div *ngIf="isUserAuthenticated && followers && followers.length > 0">
 <mat-card *ngFor="let follower of followers">
     <mat-card-header>
-      <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
+      <img mat-card-avatar [src]='follower.profileImagePath'>
       <mat-card-title>{{ follower.fname }} {{ follower.lname }}</mat-card-title>
       <mat-card-subtitle>{{follower.email}} </mat-card-subtitle>
       <button mat-button color='primary' *ngIf='!follower.flag' (click)='followUser($event, follower.email)'>FOLLOW</button>

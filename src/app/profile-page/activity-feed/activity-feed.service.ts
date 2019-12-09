@@ -21,7 +21,7 @@ export class ActivityFeedService {
             userEmail: photo.email,
             fname: photo.fname,
             lname: photo.lname,
-            profileImagePath: photo.profileimagePath,
+            profileImagePath: photo.profileImagePath,
             imagePath: photo.imagePath,
             caption: photo.caption,
             id: photo.id,

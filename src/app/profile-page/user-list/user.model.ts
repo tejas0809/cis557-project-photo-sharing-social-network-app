@@ -7,6 +7,6 @@ export interface User {
   country: string;
   city: string;
   bio: string;
-  profileimagePath: string;
-  coverimagePath: string;
+  profileImagePath: string;
+  coverImagePath: string;
 }

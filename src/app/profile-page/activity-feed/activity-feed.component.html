@@ -41,7 +41,7 @@
 <div *ngIf = "photos.length > 0">
 <mat-card  *ngFor="let photo of photos">
   <mat-card-header>
-    <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
+    <img mat-card-avatar [src]='photo.profileImagePath'>
     <mat-card-title>{{photo.fname}} {{photo.lname}}</mat-card-title>
     <mat-card-subtitle>{{photo.userEmail}}</mat-card-subtitle>
   </mat-card-header>

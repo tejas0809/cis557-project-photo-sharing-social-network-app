@@ -6,7 +6,7 @@
 <div *ngIf="isUserAuthenticated && followings && followings.length > 0">
 <mat-card *ngFor="let following of followings">
     <mat-card-header>
-      <img mat-card-avatar src='assets/images/bckg-an1.jpg'>
+      <img mat-card-avatar [src]='following.profileImagePath'>
       <mat-card-title>{{ following.fname }} {{ following.lname }}</mat-card-title>
       <mat-card-subtitle>{{following.email}} </mat-card-subtitle>
       <button mat-button color='accent' (click)='unfollowUser($event, following.email)'>UNFOLLOW</button>

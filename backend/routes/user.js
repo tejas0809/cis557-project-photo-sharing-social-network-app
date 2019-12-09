@@ -307,7 +307,7 @@ function getFollowingCount(req, res) {
 
 function getFollowing(req, res) {
   console.log("Get all the users which the current user is following");
-  const sql = 'select users.email,users.fname, users.lname, users.profileimagePath from follows inner join users on users.email=follows.email2 where follows.email1 = ?'
+  const sql = 'select users.email,users.fname, users.lname, users.profileImagePath from follows inner join users on users.email=follows.email2 where follows.email1 = ?'
   const params = [req.params.email];
 
   db.query(sql, params, (err, rows) => {

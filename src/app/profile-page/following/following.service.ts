@@ -21,7 +21,7 @@ export class FollowingService {
             email: followng.email,
             fname: followng.fname,
             lname: followng.lname,
-            profileImagePath: followng.profileimagePath
+            profileImagePath: followng.profileImagePath
           };
       });
       })
