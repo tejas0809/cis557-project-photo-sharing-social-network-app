@@ -2,7 +2,7 @@
 
 
 App Link: https://damp-oasis-06659.herokuapp.com/profile/myprofile
-Team Name: <web>tkn</web> <br>
+Team Name: \<web\>tkn\</web\> <br>
 Team Members: 
 <table>
  <tr>
