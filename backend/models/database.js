@@ -1,11 +1,11 @@
 var mysql = require('mysql');
 
-const DB_NAME = 'lCyhRqgxXP';
+const DB_NAME = 'pixagramdb';
 var con = mysql.createConnection({
-  host: 'remotemysql.com',
+  host: 'pixagramdb.ccxkiclbondr.us-east-1.rds.amazonaws.com',
   port: '3306',
-  user: 'lCyhRqgxXP',
-  password: 'SWiPLNcA8h',
+  user: 'root',
+  password: 'password',
   database: DB_NAME
   });
   con.connect(function(err) {
