@@ -85,9 +85,9 @@ export class CommentsService {
       'http://localhost:3000/api/post/comment/' + commentid,
       contentBody
     ).subscribe( res => {
-      if(res.message === 'success') {
+      if (res.message === 'success') {
         console.log('Comment Updated Successfully');
       }
-    })
+    });
   }
 }

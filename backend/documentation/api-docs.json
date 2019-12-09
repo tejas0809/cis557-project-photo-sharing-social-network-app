@@ -24,6 +24,13 @@
   "schemes": [
     "http"
   ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
   "paths": {
     "/api/post/{id}": {
       "get": {
@@ -72,6 +79,11 @@
         "summary": "edit a post",
         "description": "",
         "operationId": "editPost",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -130,6 +142,11 @@
         "summary": "delete a post",
         "description": "",
         "operationId": "deletePost",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -207,6 +224,11 @@
         "summary": "Insert new post with image for a logged-in user with parameter as his login-email",
         "description": "",
         "operationId": "createPostofUser",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "consumes": [
           "multipart/form-data"
         ],
@@ -250,6 +272,11 @@
         "summary": "like a post",
         "description": "",
         "operationId": "likePost",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -310,6 +337,11 @@
         "summary": "unlike a post",
         "description": "",
         "operationId": "unlikePost",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -376,6 +408,11 @@
         "summary": "add a comment",
         "description": "",
         "operationId": "addComment",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -440,6 +477,11 @@
         "summary": "edit a comment",
         "description": "",
         "operationId": "editComment",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -498,6 +540,11 @@
         "summary": "delete a comment",
         "description": "",
         "operationId": "deleteComment",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -544,6 +591,11 @@
         "summary": "Getting all comments for a post",
         "description": "",
         "operationId": "getComments",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -640,6 +692,59 @@
             "description": "User not found"
           }
         }
+      },
+      "put": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "editing user profile",
+        "description": "",
+        "operationId": "editUserProfile",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "The user will be fetched by user e-mail.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User registration/profile information fields to be saved",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserProfile"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/user/signup": {
@@ -718,7 +823,7 @@
         }
       }
     },
-    "/api/user/follow": {
+    "/api/user/follow/{email}": {
       "post": {
         "tags": [
           "user"
@@ -726,22 +831,31 @@
         "summary": "Create User follower record in follows.",
         "description": "",
         "operationId": "followUser",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
+            "name": "email",
+            "in": "path",
+            "description": "user2 email.",
+            "required": true,
+            "type": "string"
+          },
+          {
             "in": "body",
             "name": "body",
-            "description": "email of person to be followed.",
+            "description": "user1 email.",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
-                "user1": {
-                  "type": "string"
-                },
-                "user2": {
+                "email": {
                   "type": "string"
                 }
               }
@@ -769,7 +883,7 @@
         }
       }
     },
-    "/api/user/unfollow": {
+    "/api/user/unfollow/{email1}{email2}": {
       "delete": {
         "tags": [
           "user"
@@ -777,33 +891,40 @@
         "summary": "Unfollow perviously followed person.",
         "description": "",
         "operationId": "unfollowUser",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "email of person to be followed.",
+            "name": "email1",
+            "in": "path",
+            "description": "user1 email.",
             "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "user1": {
-                  "type": "string"
-                },
-                "user2": {
-                  "type": "string"
-                }
-              }
-            }
+            "type": "string"
+          },
+          {
+            "name": "email2",
+            "in": "path",
+            "description": "user2 email.",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "success",
+            "description": "Successfully deleted",
             "schema": {
-              "$ref": "#/definitions/User"
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
             }
           },
           "400": {
@@ -902,7 +1023,7 @@
         }
       }
     },
-    "/api/user/followercount/{email}": {
+    "/api/user/followerscount/{email}": {
       "get": {
         "tags": [
           "user"
@@ -910,6 +1031,55 @@
         "summary": "Get number of followers of a user",
         "description": "",
         "operationId": "getFollowerCount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Users email.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "followercount": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/followingcount/{email}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get number of users the current user is following",
+        "description": "",
+        "operationId": "getFollowingCount",
         "produces": [
           "application/json"
         ],
@@ -976,6 +1146,210 @@
             "description": "success",
             "schema": {
               "$ref": "#/definitions/Users"
+            }
+          },
+          "404": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/likedposts/{email}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all followers of a user",
+        "description": "",
+        "operationId": "getLikedPosts",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Users email.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/Posts"
+            }
+          },
+          "404": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/explore/{email}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get follow suggestios for a user",
+        "description": "",
+        "operationId": "getFollowSuggestions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Users email.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          },
+          "404": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/editProfile/{email}": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Edit profile photo af an user",
+        "description": "",
+        "operationId": "editProfilePhoto",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Users email.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileimage",
+            "in": "formData",
+            "description": "image to be uploaded",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/editCover/{email}": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Edit Cover photo af an user",
+        "description": "",
+        "operationId": "editCoverPhoto",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Users email.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "coverImage",
+            "in": "formData",
+            "description": "image to be uploaded as cover photo",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
             }
           },
           "404": {

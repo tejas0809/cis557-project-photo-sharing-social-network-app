@@ -15,6 +15,7 @@ import { FollowersComponent } from './profile-page/followers/followers.component
 import { FollowingComponent } from './profile-page/following/following.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { CommentsComponent } from './profile-page/comments/comments.component';
+import { LikedPostComponent } from './profile-page/liked-posts/liked-post..component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -60,6 +61,11 @@ const routes: Routes = [
       {
         path: 'comments',
         component: CommentsComponent,
+        canActivate: [UserAuthGuard]
+      },
+      {
+        path: 'likePosts',
+        component: LikedPostComponent,
         canActivate: [UserAuthGuard]
       }
   ]}

@@ -5,6 +5,9 @@ const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
 const webapp = express();
 
+var swaggerUi = require('swagger-ui-express'),
+swaggerDocument = require('./documentation/api-docs.json');
+
 // parse application/x-www-form-urlencoded
 webapp.use(bodyParser.urlencoded({ extended: true }));
 
@@ -32,9 +35,11 @@ webapp.use("/api/user", userRoutes);
 webapp.use('/api/post',postRoutes);
 webapp.use(express.static('backend/documentation'));
 
-webapp.get('/swagger', function (req, res) {
-res.sendFile(__dirname + 'backend/documentation/index.html');
-});
+// webapp.get('/swagger', function (req, res) {
+// res.sendFile(__dirname + 'backend/documentation/index.html');
+// });
+webapp.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 webapp.use((req, res, next) => {
   res.sendFile(path.join(__dirname, "pixagram", "index.html"))

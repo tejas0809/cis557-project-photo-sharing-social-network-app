@@ -1,0 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300&display=swap');
+mat-dialog-content{
+    font-family: 'Roboto', sans-serif;
+}

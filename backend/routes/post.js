@@ -34,6 +34,8 @@ router.get('/:id', (req,res) => getPost(req,res));
 router.get('/user/:email', (req, res) => getPostsOfUser(req,res));
 router.post('/user/:email', checkAuth, multer({storage: storage}).single('image'), (req, res) => createPostOfUser(req,res));
 router.post('/like/:id' , checkAuth, (req,res) => likePost(req,res));
+router.post('/tag/:id', checkAuth,(req,res) => addTags(req,res));
+router.get('/tag/:id',checkAuth,(req,res)=> getTags(req,res));
 router.delete('/unlike/:id&:email', checkAuth, (req,res) => unlikePost(req,res));
 router.put('/:id', checkAuth, (req,res) => editPost(req,res));
 router.post('/comment/:id',checkAuth, (req,res) => addComment(req,res));
@@ -41,6 +43,7 @@ router.get('/comments/:id', (req,res) => getComments(req,res));
 router.put('/comment/:id',checkAuth, (req,res) => editComment(req,res));
 router.delete('/comment/:id',checkAuth, (req,res) => deleteComment(req,res));
 router.delete('/:id',checkAuth, (req,res) => deletePost(req,res));
+
 
 function getPostsOfUser(req, res) {
   console.log("Get all posts of a user");
@@ -98,11 +101,6 @@ function getPost(req,res) {
       res.status(404).json({ message: err.message });
       return;
     }
-    if(row.length==0){
-      return res.status(401).json({
-        message: 'No such Post found!'
-      })
-    }
 
     res.json({
       message: 'success',
@@ -126,6 +124,52 @@ function likePost(req,res){
       postlike:result
     });
   });
+}
+
+ function addTags(req,res){
+  console.log("adding tags to post");
+  const len=req.body.tagging.length;
+  // const tot_result=[];
+   for(index=0;index<len;index++){
+    const values=[req.params.id, req.body.emails[index]];
+
+    const sql="insert into tags(post_id,email) values (?,?)";
+     db.query(sql,values,function(err,result){
+      if(err){
+        console.log(err);
+        res.status(400).json({message: err.message});
+        return;
+      }
+      // tot_result=tot_result.push(result)
+    })
+  }
+  res.json({
+    message:'success',
+    // data:tot_result
+  })
+}
+
+function getTags(req,res){
+  console.log("getting tags for a post");
+  const values=[req.params.id];
+  const sql="select email from tags where post_id=?";
+  db.query(sql,values,function(err,result){
+    if(err){
+      console.log(err);
+      res.status(400).json({message:err.message});
+      return;
+    }
+    const len=result.length;
+    const emails=[];
+    for(index=0;index<len;index++)
+    {
+      emails.push(result[index].email);
+    }
+    res.json({
+      message:'success',
+      tags: emails
+    })
+  })
 }
 
 function unlikePost(req,res){

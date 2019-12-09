@@ -7,20 +7,21 @@ import { UsersAuthService } from '../user-list/usersauth.service';
 @Injectable()
 export class LikedPostsService {
   likedPost: any = [];
+  likedPostUpdated = new Subject<any[]>();
 
   constructor(private http: HttpClient) {}
 
   getLikedPosts(email: string) {
     this.http
-    .get<{message: string, photos: any}>('http://localhost:3000/api/post/likedPosts' + email)
+    .get<{message: string, posts: any}>('http://localhost:3000/api/user/likedPosts/' + email)
     .pipe(
       map(likeData => {
-        return likeData.photos.map( likePost => {
+        return likeData.posts.map( likePost => {
           return {
             email: likePost.userEmail,
             fname: likePost.fname,
             lname: likePost.lname,
-            id: likePost.post.id,
+            id: likePost.id,
             profileImagePath: likePost.profileImagePath,
             imagePath: likePost.imagePath,
             caption: likePost.caption
@@ -29,6 +30,7 @@ export class LikedPostsService {
       })
     ).subscribe(updatedlikePosts => {
       this.likedPost = updatedlikePosts;
+      this.likedPostUpdated.next([...this.likedPost]);
     });
   }
 
@@ -50,6 +52,7 @@ export class LikedPostsService {
           caption: post.caption
         };
         this.likedPost.push(newlikedPost);
+        this.likedPostUpdated.next([... this.likedPost]);
       }
     });
 
@@ -65,5 +68,9 @@ export class LikedPostsService {
         this.getLikedPosts(email);
       }
     });
+  }
+
+  getlikedUpdatedListener() {
+    return this.likedPostUpdated.asObservable();
   }
 }

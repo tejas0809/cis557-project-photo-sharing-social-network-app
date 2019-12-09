@@ -158,7 +158,7 @@ export class CommentsComponent implements OnInit {
 
     const contentEle = document.getElementById(contentId);
 
-    if(this.commentForm.invalid) {
+    if (this.commentForm.invalid) {
       return;
     }
 

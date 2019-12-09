@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PhotosService } from './photo.service';
 import { mimeType } from './mime-type-validator';
+import { FollowingService } from '../following/following.service';
+import { UsersAuthService } from '../user-list/usersauth.service';
+import { Subscription } from 'rxjs';
+import { UsersService } from '../user-list/users.service';
 
 @Component({
   selector: 'app-photo-upload',
@@ -13,10 +17,24 @@ export class PhotoUploadComponent implements OnInit {
   userPhotos: FormGroup;
   ImagePreview: string;
   showContent = false;
+  userEmail: string;
+  isUserAuthenticated: boolean;
+  userAuthSub: Subscription;
+  userSub: Subscription;
+  users: any[] = [];
 
-  constructor(public photoService: PhotosService) {}
+  constructor(public photoService: PhotosService, public authUserService: UsersAuthService, private userService: UsersService) {}
 
   ngOnInit() {
+    this.userEmail = this.authUserService.getUserEmail();
+    this.isUserAuthenticated = this.authUserService.getIsUserAuth();
+
+    this.userAuthSub = this.authUserService
+                .getUserAuthStatusListener().subscribe( isAuthenticated => {
+                    this.isUserAuthenticated = isAuthenticated;
+                    this.userEmail = this.authUserService.getUserEmail();
+                  });
+
     this.userPhotos = new FormGroup({
       image: new FormControl(null, {
         validators: [Validators.required],
@@ -25,6 +43,13 @@ export class PhotoUploadComponent implements OnInit {
       caption: new FormControl(null, {
         validators: []
       })
+    });
+
+    this.userService.getUsers();
+
+    this.userSub = this.userService.getUserUpdatedlistener()
+    .subscribe((res) => {
+      this.users = res;
     });
   }
 
@@ -46,7 +71,6 @@ export class PhotoUploadComponent implements OnInit {
     }
     // console.log(this.userPhotos);
     this.photoService.addPhoto(this.userPhotos.value.image, this.userPhotos.value.caption);
-
     this.userPhotos.reset();
     this.ImagePreview = null;
   }
