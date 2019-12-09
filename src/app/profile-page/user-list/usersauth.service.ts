@@ -108,7 +108,7 @@ export class UsersAuthService {
     if (this.loginAllow !== 'false') {
     this.http
       .post<{ token: string; expiresIn: number, email: string, message: string }>(
-        'http://localhost:3000/api/user/login',
+        '/api/user/login',
         authData
       )
       .subscribe(res => {
