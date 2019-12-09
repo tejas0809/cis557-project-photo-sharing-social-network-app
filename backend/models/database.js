@@ -1,11 +1,11 @@
 var mysql = require('mysql');
 
-const DB_NAME = 'pixagram';
+const DB_NAME = 'lCyhRqgxXP';
 var con = mysql.createConnection({
-  host: '127.0.0.1',
+  host: 'remotemysql.com',
   port: '3306',
-  user: 'root',
-  password: 'password',
+  user: 'lCyhRqgxXP',
+  password: 'SWiPLNcA8h',
   database: DB_NAME
   });
   con.connect(function(err) {
@@ -40,7 +40,7 @@ var con = mysql.createConnection({
       userEmail VARCHAR(150) NOT NULL,
       PRIMARY KEY     (id),
       FOREIGN KEY (userEmail)
-      REFERENCES Users (email)
+      REFERENCES users (email)
       ON UPDATE CASCADE
       ON DELETE CASCADE
     )`,function (err, result, fields) {
@@ -53,8 +53,8 @@ var con = mysql.createConnection({
       post_id int(10) unsigned NOT NULL,
       email VARCHAR(150) NOT NULL,
       PRIMARY KEY(post_id,email),
-      FOREIGN KEY (email) REFERENCES Users(email) ON UPDATE CASCADE ON DELETE CASCADE,
-      FOREIGN KEY(post_id) REFERENCES Posts(id) ON UPDATE CASCADE ON DELETE CASCADE
+      FOREIGN KEY (email) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
+      FOREIGN KEY(post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE
     )`,function (err, result, fields) {
       if (err) throw err;
       console.log(result);
@@ -67,8 +67,8 @@ var con = mysql.createConnection({
       email2 VARCHAR(150) NOT NULL,
       followsTimestamp timestamp default current_timestamp NOT NULL,
       PRIMARY KEY (email1,email2),
-      FOREIGN KEY (email1) REFERENCES Users(email) ON UPDATE CASCADE ON DELETE CASCADE,
-      FOREIGN KEY (email2) REFERENCES Users(email) on update cascade on delete cascade
+      FOREIGN KEY (email1) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
+      FOREIGN KEY (email2) REFERENCES users(email) on update cascade on delete cascade
   )`,function (err, result, fields) {
     if (err) throw err;
     console.log(result);
@@ -81,8 +81,8 @@ var con = mysql.createConnection({
     email VARCHAR(150) NOT NULL, content varchar(4000) NOT NULL,
     commentsTimestamp timestamp default current_timestamp NOT NULL,
     PRIMARY KEY (commentId),
-    FOREIGN KEY (post_id) REFERENCES Posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (email) REFERENCES Users(email) on update cascade on delete cascade
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (email) REFERENCES users(email) on update cascade on delete cascade
   )`,
 
   function (err, result, fields) {
@@ -97,11 +97,11 @@ var con = mysql.createConnection({
     likesTimestamp timestamp default current_timestamp NOT NULL,
     PRIMARY KEY     (email,postId),
     FOREIGN KEY (email)
-      REFERENCES Users (email)
+      REFERENCES users (email)
       ON UPDATE CASCADE
       ON DELETE CASCADE,
       FOREIGN KEY (postId)
-      REFERENCES Posts (id)
+      REFERENCES posts (id)
       ON UPDATE CASCADE
       ON DELETE CASCADE
     )`,
