@@ -13,7 +13,7 @@ export class FollowingService {
 
   getFollowing(email: string) {
     return this.http
-    .get<{message: string, following: any}>('http://localhost:3000/api/user/following/' + email)
+    .get<{message: string, following: any}>('/api/user/following/' + email)
     .pipe(
       map(followingData => {
         return followingData.following.map(followng => {
@@ -35,7 +35,7 @@ export class FollowingService {
     const user = {email: email1};
     this.http
     .post<{ message: string }>
-    ('http://localhost:3000/api/user/follow/' + email2,
+    ('/api/user/follow/' + email2,
     user)
     .subscribe(res => {
       console.log('follow:' + res);
@@ -51,7 +51,7 @@ export class FollowingService {
     const emails = {email1, email2};
     this.http
     .delete<{message: string}>
-    ('http://localhost:3000/api/user/unfollow/' + email1 + '&' + email2)
+    ('/api/user/unfollow/' + email1 + '&' + email2)
     .subscribe( res => {
       console.log('Unfollow:' + res);
       if (res.message === 'success') {
@@ -66,6 +66,6 @@ export class FollowingService {
 
   getFollowingCount(email: string) {
     return this.http
-    .get<{message: string, followingCount: number}>('http://localhost:3000/api/user/followingCount/' + email);
+    .get<{message: string, followingCount: number}>('/api/user/followingCount/' + email);
   }
 }

@@ -13,7 +13,7 @@ export class ActivityFeedService {
 
   getActivityFeed(email: string) {
     this.http
-    .get<{message: string, users: any}>('http://localhost:3000/api/user/activityfeed/' + email)
+    .get<{message: string, users: any}>('/api/user/activityfeed/' + email)
     .pipe(
       map(photoData => {
         return photoData.users.map(photo => {
@@ -43,7 +43,7 @@ export class ActivityFeedService {
     const user = {email};
     this.http
     .post<{message: string}>
-    ('http://localhost:3000/api/post/like/' + id,
+    ('/api/post/like/' + id,
     user)
     .subscribe( res => {
       console.log('Liked', res);
@@ -56,7 +56,7 @@ export class ActivityFeedService {
   unlikePost(email: string, id: number) {
     this.http
     .delete<{message: string}>
-    ('http://localhost:3000/api/post/unlike/' + id + '&' + email)
+    ('/api/post/unlike/' + id + '&' + email)
     .subscribe( res => {
       console.log('Unliked', res);
       if (res.message === 'success') {

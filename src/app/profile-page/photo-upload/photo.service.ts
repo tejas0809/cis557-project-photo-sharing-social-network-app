@@ -14,7 +14,7 @@ export class PhotosService {
 
   getPhotos(email: string) {
     this.http
-    .get<{message: string, photos: any}>('http://localhost:3000/api/post/user/' + email)
+    .get<{message: string, photos: any}>('/api/post/user/' + email)
     .pipe(
       map(photoData => {
         return photoData.photos.map(photo => {
@@ -44,7 +44,7 @@ export class PhotosService {
 
     this.http
     .post<{ message: string, post: any, id: number}>(
-      'http://localhost:3000/api/post/user/' + userEmail,
+      '/api/post/user/' + userEmail,
       photoData
     )
     .subscribe( res => {
@@ -70,7 +70,7 @@ export class PhotosService {
     const captionBody = {caption};
     this.http
     .put<{message: string}>(
-      'http://localhost:3000/api/post/' + postid,
+      '/api/post/' + postid,
       captionBody
     ).subscribe( res => {
       if (res.message === 'success') {
@@ -80,7 +80,7 @@ export class PhotosService {
   }
 
   deletePhoto(postid: number) {
-    return this.http.delete('http://localhost:3000/api/post/' + postid);
+    return this.http.delete('/api/post/' + postid);
   }
 
 }

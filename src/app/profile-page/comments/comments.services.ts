@@ -14,7 +14,7 @@ export class CommentsService {
 
   getComments(postid: number) {
     this.http
-    .get< {message: string, comments: any} >('http://localhost:3000/api/post/comments/' + postid)
+    .get< {message: string, comments: any} >('/api/post/comments/' + postid)
     .pipe(
       map(commentData => {
         return commentData.comments.map( comment => {
@@ -57,7 +57,7 @@ export class CommentsService {
     console.log('Email:', email, 'Content:', content);
     this.http
     .post<{message: string, comment: any}>(
-      'http://localhost:3000/api/post/comment/' + this.userInfo.id,
+      '/api/post/comment/' + this.userInfo.id,
       commentBody
     ).subscribe( res => {
       if (res.message === 'success') {
@@ -74,7 +74,7 @@ export class CommentsService {
   }
 
   deleteComment(commentid: number) {
-    return this.http.delete('http://localhost:3000/api/post/comment/' + commentid);
+    return this.http.delete('/api/post/comment/' + commentid);
   }
 
   editComment(commentid: number, content: string) {
@@ -82,7 +82,7 @@ export class CommentsService {
     const contentBody = {content};
     this.http
     .put<{message: string}>(
-      'http://localhost:3000/api/post/comment/' + commentid,
+      '/api/post/comment/' + commentid,
       contentBody
     ).subscribe( res => {
       if (res.message === 'success') {

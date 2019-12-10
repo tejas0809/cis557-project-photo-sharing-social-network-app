@@ -14,7 +14,7 @@ export class UsersService {
 
   getUsers() {
     this.http
-    .get<{message: string, users: any}>('http://localhost:3000/api/user')
+    .get<{message: string, users: any}>('/api/user')
     .pipe(
       map(userData => {
         return userData.users.map(user => {
@@ -40,7 +40,7 @@ export class UsersService {
 
   exploreUsers(email: string) {
     this.http
-    .get<{message: string, users: any}>('http://localhost:3000/api/user/explore/' + email)
+    .get<{message: string, users: any}>('/api/user/explore/' + email)
     .pipe(
       map(userData => {
         return userData.users.map(user => {
@@ -68,7 +68,7 @@ export class UsersService {
 
    return this.http.get<{
       user: User
-    }>('http://localhost:3000/api/user/' + email);
+    }>('/api/user/' + email);
   }
 
   addUser(user: User) {
@@ -100,7 +100,7 @@ export class UsersService {
       };
 
       this.http
-      .put<{message: string}>('http://localhost:3000/api/user/' + email, userData)
+      .put<{message: string}>('/api/user/' + email, userData)
       .subscribe( res => {
         if (res.message === 'success') {
           console.log('User Edited Successfully');
@@ -113,7 +113,7 @@ export class UsersService {
     profilePhotoData.append('profileimage', profileImage, email);
 
     this.http
-    .put<{message: string}>('http://localhost:3000/api/user/editProfile/' + email, profilePhotoData)
+    .put<{message: string}>('/api/user/editProfile/' + email, profilePhotoData)
     .subscribe( res => {
       if (res.message === 'success') {
         console.log('Profile Photo Edited');
@@ -126,7 +126,7 @@ export class UsersService {
     coverPhotoData.append('coverimage', coverImage, email);
 
     this.http
-    .put<{message: string}>('http://localhost:3000/api/user/editCover/' + email, coverPhotoData)
+    .put<{message: string}>('/api/user/editCover/' + email, coverPhotoData)
     .subscribe( res => {
       if (res.message === 'success') {
         console.log('Cover Photo Updated');

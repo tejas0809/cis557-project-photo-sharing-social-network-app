@@ -64,7 +64,7 @@ export class UsersAuthService {
 
               this.http
               .post<{ message: string, user: any }>(
-                'http://localhost:3000/api/user/signup',
+                '/api/user/signup',
                 userData
               )
               .subscribe(res => {

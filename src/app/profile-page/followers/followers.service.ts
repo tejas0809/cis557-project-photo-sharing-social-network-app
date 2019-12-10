@@ -8,11 +8,11 @@ export class FollowersService {
 
   getFollowers(email: string) {
     return this.http
-    .get<{message: string, followers: any}>('http://localhost:3000/api/user/followers/' + email);
+    .get<{message: string, followers: any}>('/api/user/followers/' + email);
   }
 
   getFollowersCount(email: string) {
     return this.http
-    .get<{message: string, followerCount: number}>('http://localhost:3000/api/user/followersCount/' + email);
+    .get<{message: string, followerCount: number}>('/api/user/followersCount/' + email);
   }
 }

@@ -13,7 +13,7 @@ export class LikedPostsService {
 
   getLikedPosts(email: string) {
     this.http
-    .get<{message: string, posts: any}>('http://localhost:3000/api/user/likedPosts/' + email)
+    .get<{message: string, posts: any}>('/api/user/likedPosts/' + email)
     .pipe(
       map(likeData => {
         return likeData.posts.map( likePost => {
@@ -37,7 +37,7 @@ export class LikedPostsService {
   likePost(email: string, post: any) {
     this.http
     .post<{message: string, post: any}>(
-      'http:/localhost:3000/api/post/like' + post.id,
+      '/api/post/like' + post.id,
       email
     )
     .subscribe(res => {
@@ -61,7 +61,7 @@ export class LikedPostsService {
   unlikePost(email: string, post: any) {
     this.http
     .delete<{message: string}>(
-      'http://localhost:3000/api/post/unlike/' + post.id + '/' + email
+      '/api/post/unlike/' + post.id + '/' + email
     )
     .subscribe(res => {
       if (res.message === 'success') {
