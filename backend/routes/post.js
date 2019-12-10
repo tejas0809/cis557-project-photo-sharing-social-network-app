@@ -51,7 +51,7 @@ function getPostsOfUser(req, res) {
   const params = [req.params.email];
 
   //db.all(sql, params, (err, rows) => {
-    db.query(sql, params, (err, rows) => {
+    db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -78,7 +78,7 @@ function createPostOfUser(req, res) {
   const insert = 'INSERT INTO posts (imagePath, caption, userEmail) VALUES (?,?,?)';
   const values = [newPhoto.imagePath, newPhoto.caption, newPhoto.email];
 
-  db.query(insert, values, function (err, result) {
+  db.con.query(insert, values, function (err, result) {
     if (err) {
       console.log(err);
       res.status(400).json({ message: err.message });
@@ -96,7 +96,7 @@ function getPost(req,res) {
   console.log("getting one post");
   const sql="select * from posts where id= ?";
   const params=[req.params.id];
-  db.query(sql, params, (err, row) => {
+  db.con.query(sql, params, (err, row) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -113,7 +113,7 @@ function likePost(req,res){
   console.log("like a post");
   const values=[req.body.email,req.params.id];
   const sql="insert into likes (email, postId) values (?,?)";
-  db.query(sql,values,function(err,result){
+  db.con.query(sql,values,function(err,result){
     if(err){
       console.log(err);
       res.status(400).json({ message: err.message });
@@ -134,7 +134,7 @@ function likePost(req,res){
     const values=[req.params.id, req.body.emails[index]];
 
     const sql="insert into tags(post_id,email) values (?,?)";
-     db.query(sql,values,function(err,result){
+     db.con.query(sql,values,function(err,result){
       if(err){
         console.log(err);
         res.status(400).json({message: err.message});
@@ -153,7 +153,7 @@ function getTags(req,res){
   console.log("getting tags for a post");
   const values=[req.params.id];
   const sql="select email from tags where post_id=?";
-  db.query(sql,values,function(err,result){
+  db.con.query(sql,values,function(err,result){
     if(err){
       console.log(err);
       res.status(400).json({message:err.message});
@@ -176,7 +176,7 @@ function unlikePost(req,res){
   console.log("unlike a post");
   const values=[req.params.email,req.params.id];
   const sql="delete from likes where email=? and postId=?";
-  db.query(sql,values,function(err,result){
+  db.con.query(sql,values,function(err,result){
     if(err){
       console.log(err);
       res.status(400).json({ message: err.message });
@@ -193,7 +193,7 @@ function editPost(req,res){
   console.log("edit a post");
   const values=[req.body.caption,req.params.id];
   const sql="update posts set caption=? where id=?";
-  db.query(sql,values,function(err, result){
+  db.con.query(sql,values,function(err, result){
     if(err){
       console.log(err);
       res.status(400).json({message:err.message});
@@ -214,7 +214,7 @@ function addComment(req,res){
   console.log("adding a new comment");
   const values=[req.params.id,req.body.email,req.body.content];
   const sql='insert into comments (post_id, email, content) values (?,?,?)';
-  db.query(sql,values,function(err,result){
+  db.con.query(sql,values,function(err,result){
     if(err){
       console.log(err);
       res.status(400).json({message:err.message});
@@ -237,7 +237,7 @@ function getComments(req,res){
   console.log("getting all comments for a post");
   const values=[req.params.id];
   const sql='select comments.commentId as id, users.fname, users.lname, comments.content, comments.email, comments.commentsTimestamp from comments inner join users on comments.email=users.email where post_id=? order by comments.commentsTimestamp';
-  db.query(sql,values,function(err,result){
+  db.con.query(sql,values,function(err,result){
     if(err){
       console.log(err);
       res.status(400).json({message:err.message});
@@ -254,7 +254,7 @@ function editComment(req,res){
   console.log("editing a comment");
   const values=[req.body.content,req.params.id]
   const sql="update comments set content=? where commentId=?";
-  db.query(sql,values,(err,result) =>{
+  db.con.query(sql,values,(err,result) =>{
     if(err){
       res.status(400).json({message:err.message});
       return;
@@ -274,7 +274,7 @@ function deleteComment(req,res){
   console.log("deleting a comment");
   const values=[req.params.id];
   const sql='delete from comments where commentId=?';
-  db.query(sql,values,(err,rows) =>{
+  db.con.query(sql,values,(err,rows) =>{
     if(err){
       res.status(400).json({message:err.message});
       return;
@@ -293,7 +293,7 @@ function deletePost(req,res){
   console.log("delete a post");
   const values=[req.params.id];
   const sql='delete from posts where id=?';
-  db.query(sql,values,(err,rows) =>{
+  db.con.query(sql,values,(err,rows) =>{
     if(err){
       res.status(400).json({message:err.message});
       return;

@@ -9,6 +9,7 @@ var db_config = {
   database: DB_NAME
 };
 var con;
+var conObj = {con: ''};
 function handleDisconnect() {
   con = mysql.createConnection(db_config);
   con.connect(function(err) {
@@ -116,12 +117,15 @@ function handleDisconnect() {
 
   con.on('error', function(err) {
     if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-      handleDisconnect();
+      conObj.con = handleDisconnect();
+      module.exports =  conObj
     } else {
       throw err;
     }
   });
+
+  return con;
 };
 
-handleDisconnect();
-module.exports = con;
+conObj.con = handleDisconnect();
+module.exports = conObj;

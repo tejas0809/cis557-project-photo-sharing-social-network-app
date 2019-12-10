@@ -53,7 +53,7 @@ function getAllUsers(req,res) {
   console.log('READ all users');
   const sql = 'select * from users';
   const params = [];
-  db.query(sql, params, (err, rows) => {
+  db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -70,7 +70,7 @@ function  getUser(req, res)  {
   console.log('READ a user by email');
   const sql = 'select * from users where email = ?';
   const params = [req.params.email];
-  db.query(sql, params, (err, row) => {
+  db.con.query(sql, params, (err, row) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -109,7 +109,7 @@ function signupNewUser(req, res) {
      const insert = 'INSERT INTO users (email, password, fname, lname, dob, gender, country, city, bio) VALUES (?,?,?,?,?,?,?,?,?)';
      const values = [newUser.email, password, newUser.fname, newUser.lname, newUser.dob, newUser.gender, newUser.country, newUser.city, newUser.bio ];
 
-      db.query(insert, values, function (err, result) {
+      db.con.query(insert, values, function (err, result) {
         if (err) {
           console.log(err.message);
           if(err.message.includes("ER_DUP_ENTRY")){
@@ -137,7 +137,7 @@ function unfollowUser(req,res){
   const sqlDelete = 'Delete from follows where email1 = ? and email2 = ?';
   const values = [follow.user1, follow.user2];
 
-  db.query(sqlDelete, values, function (err, result) {
+  db.con.query(sqlDelete, values, function (err, result) {
     if (err) {
       console.log(err);
       res.status(400).json({ message: err.message });
@@ -162,7 +162,7 @@ function followUser(req,res) {
   const insert = 'INSERT INTO follows (email1, email2) VALUES (?,?)';
   const values = [follow.user1, follow.user2];
   console.log("user following another user")
-  db.query(insert, values, function (err, result) {
+  db.con.query(insert, values, function (err, result) {
     if (err) {
       if(err.message.includes("ER_DUP_ENTRY")){
         res.status(400).json({message:'Already Following !'});
@@ -182,7 +182,7 @@ function loginUser(req, res) {
   const sql = 'select * from users where email = ?';
   const params = [req.body.email, req.body.password];
 
-  db.query(sql, params, (err, row) => {
+  db.con.query(sql, params, (err, row) => {
     if (err) {
       res.status(401).json({ message: 'err: Authentication Failed' });
       return;
@@ -240,7 +240,7 @@ function getFollowers(req, res) {
   const sql = 'select u.email as email, u.fname as fname, u.lname as lname, profileImagePath as profileImagePath, if(g.followsTimestamp iS NULL, FALSE, TRUE) as flag from follows f inner join users u on  u.email = f.email1  left join (select email2 as email, followsTimestamp from follows where email1 = ?) g on g.email = f.email1 where f.email2 =?';
   const params = [req.params.email, req.params.email];
 
-  db.query(sql, params, (err, rows) => {
+  db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -256,7 +256,7 @@ function getFollowSuggestions(req,res) {
   console.log("Get follow suggestios for a user");
   const sql='select * from users where email not in (select email2 from follows where email1=?)'
   const params = [req.params.email];
-  db.query(sql, params, (err, rows) => {
+  db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -274,7 +274,7 @@ function getFollowerCount(req, res) {
   const sql = 'select count(*) as count1 from follows where email2 = ?';
   const params = [req.params.email];
 
-  db.query(sql, params, (err, rows)  => {
+  db.con.query(sql, params, (err, rows)  => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -291,7 +291,7 @@ function getFollowingCount(req, res) {
   const sql = 'select count(*) as count1 from follows where email1 = ?';
   const params = [req.params.email];
 
-  db.query(sql, params, (err, rows) => {
+  db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -310,7 +310,7 @@ function getFollowing(req, res) {
   const sql = 'select users.email,users.fname, users.lname, users.profileImagePath from follows inner join users on users.email=follows.email2 where follows.email1 = ?'
   const params = [req.params.email];
 
-  db.query(sql, params, (err, rows) => {
+  db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -328,7 +328,7 @@ function getActivityFeedPosts(req,res){
   const sql='select p.id as id, p.imagePath as imagePath, p.caption as caption, p.userEmail as email, u.fname as fname, u.lname as lname, u.profileImagePath as profileImagePath, if(likes.likesTimestamp IS NULL, FALSE, TRUE) AS flag from posts p inner join follows f on p.userEmail=f.email2 and f.email1 = ? inner join users u on u.email=f.email2 left join likes on p.id = likes.postId and f.email1 = likes.email order by p.postTimestamp';
   const params = [req.params.email];
 
-  db.query(sql, params, (err, rows) => {
+  db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -345,7 +345,7 @@ function getLikedPosts(req,res){
   const sql='select posts.id as id,posts.imagePath,posts.caption,posts.userEmail,users.fname, users.lname, users.profileImagePath from posts inner join likes on posts.id=likes.postId inner join users on posts.userEmail=users.email where likes.email like ?';
   const params = [req.params.email];
 
-  db.query(sql, params, (err, rows) => {
+  db.con.query(sql, params, (err, rows) => {
     if (err) {
       res.status(404).json({ message: err.message });
       return;
@@ -361,7 +361,7 @@ function editUserProfile(req,res){
   console.log("editing user profile");
   const sql='update users set fname=?, lname=?, bio=?, dob=?, gender=?, country=?, city=?, visibility=? where email=? ';
   const values=[req.body.fname, req.body.lname, req.body.bio, req.body.dob, req.body.gender,req.body.country,req.body.city,req.body.visibility,req.params.email];
-  db.query(sql,values,(err,rows) =>{
+  db.con.query(sql,values,(err,rows) =>{
     if(err){
       res.status(400).json({message:err.message});
       return;
@@ -381,7 +381,7 @@ function editProfilePhoto(req, res) {
   const sql = 'UPDATE users set profileImagePath=? WHERE email = ?';
   const values = [imagePath, req.params.email];
 
-  db.query(sql, values, (err, result) => {
+  db.con.query(sql, values, (err, result) => {
     if(err){
       console.log(err);
       res.status(400).json({message: err.message});
@@ -396,7 +396,7 @@ function editCoverPhoto(req, res) {
   const sql = 'UPDATE users set coverImagePath=? WHERE email=?';
   const values = [imagePath, req.params.email];
 
-  db.query(sql, values, (err, result) => {
+  db.con.query(sql, values, (err, result) => {
     if(err){
       console.log(err);
       res.status(400).json({message: err.message});
