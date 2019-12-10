@@ -4,9 +4,6 @@ node_js:
 install:
   - nvm install node
   - node -v  
-  - npm i -g yarn  
-  - yarn  
-  - npm install --save-dev jest
   - npm install
   
   
