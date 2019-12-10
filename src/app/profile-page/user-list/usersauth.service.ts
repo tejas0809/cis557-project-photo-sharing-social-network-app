@@ -85,11 +85,11 @@ export class UsersAuthService {
                   this.router.navigate(['/login']);
                 }
               }, res => {
-                if(res.error.message === "User Already Exists! Select new email or login with existing one!"){
+                if (res.error.message === 'User Already Exists! Select new email or login with existing one!'){
                   const dialogRef = this.dialog.open(MyDialogComponent, {
                     data:{
-                      myMessage:"User Already Exists! Select new email or login with existing one!",
-                      myTitle:"Failed"
+                      myMessage: 'User Already Exists! Select new email or login with existing one!',
+                      myTitle: 'Failed'
                     }
                   });
                   dialogRef.afterClosed().subscribe(result => {
@@ -127,12 +127,12 @@ export class UsersAuthService {
           }
       },
       res => {
-        if (res.error.message === 'Authentication Failed') {
+
           let mislogin = sessionStorage.getItem('loginfailed');
-          const dialogRef = this.dialog.open(MyDialogComponent, {
+          let dialogRef = this.dialog.open(MyDialogComponent, {
             data:{
-              myMessage:"Invalid email and password combination. Try again!",
-              myTitle:"Login Failed"
+              myMessage: 'Invalid email and password combination. Try again!',
+              myTitle: 'Login Failed'
             }
           });
           dialogRef.afterClosed().subscribe(result => {
@@ -148,21 +148,20 @@ export class UsersAuthService {
           console.log('mislogno:', mislogno);
           if (mislogno > 6) {
             //
-            const dialogRef = this.dialog.open(MyDialogComponent, {
+             dialogRef = this.dialog.open(MyDialogComponent, {
               data:{
-                myMessage:"Exceed Maximum failed login attempts!",
-                myTitle:"Account Locked"
+                myMessage: 'Exceed Maximum failed login attempts!',
+                myTitle: 'Account Locked'
               }
             });
-            dialogRef.afterClosed().subscribe(result => {
+             dialogRef.afterClosed().subscribe( result => {
               console.log('The dialog was closed');
             });
-            console.log('Exceeded Maximum failed login attempts');
-            sessionStorage.setItem('loginallowed', false.toString());
+             console.log('Exceeded Maximum failed login attempts');
+             sessionStorage.setItem('loginallowed', false.toString());
           }
           mislogno += 1;
           sessionStorage.setItem('loginfailed', mislogno.toString());
-        }
       });
     }
   }
