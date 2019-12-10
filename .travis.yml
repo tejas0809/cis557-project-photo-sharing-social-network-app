@@ -1,9 +1,12 @@
 language: node_js
+node_js:
+  - 10.16.3
 install:
   - nvm install node
-  - node -v
+  - node -v  
+  - npm i -g yarn  
+  - yarn  
   - npm install --save-dev jest
-  - npm install supertest
   - npm install
   
   
