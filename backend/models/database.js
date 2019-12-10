@@ -1,15 +1,18 @@
 var mysql = require('mysql');
 
 const DB_NAME = 'heroku_483e5a4ccee191b';
-var con = mysql.createConnection({
+var db_config = {
   host: 'us-cdbr-iron-east-05.cleardb.net',
   port: '3306',
-  user: 'bf53c8f3c155e4',
+  user:'bf53c8f3c155e4',
   password: '83da8fed',
   database: DB_NAME
-  });
+};
+var con;
+function handleDisconnect() {
+  con = mysql.createConnection(db_config);
   con.connect(function(err) {
-    if (err) throw err;
+    if (err) setTimeout(handleDisconnect, 2000);
     //Select all customers and return the result object:
     con.query(`CREATE TABLE IF NOT EXISTS users
     (
@@ -22,8 +25,8 @@ var con = mysql.createConnection({
       gender VARCHAR(20),
       country VARCHAR(20),
       city VARCHAR(20),
-      profileImagePath VARCHAR(1500) default 'http://localhost:3000/images/def_Profile.jpg',
-      coverImagePath VARCHAR(1500) default 'http://localhost:3000/images/def_Cover.jpg',
+      profileImagePath VARCHAR(1500) default '/images/def_Profile.jpg',
+      coverImagePath VARCHAR(1500) default '/images/def_Cover.jpg',
       visibility VARCHAR(20) default 'public',
       PRIMARY KEY     (email)
     )`,function (err, result, fields) {
@@ -111,4 +114,14 @@ var con = mysql.createConnection({
     });
   });
 
+  con.on('error', function(err) {
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+      handleDisconnect();
+    } else {
+      throw err;
+    }
+  });
+};
+
+handleDisconnect();
 module.exports = con;
