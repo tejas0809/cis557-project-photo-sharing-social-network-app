@@ -1,11 +1,11 @@
 
 # CIS557 Project Feedback
 ### web-tkn-/web
-### Graded By: Ayush Parikh (ayushp@seas.upenn.edu)
+### Graded By: 
 ---
 | Description                                                                | Points allocated | Points given | Comment |
 | -------------------------------------------------------------------------- | ---------------- | ------------ | ------- |
-| Feature implementation (level completeness) - refer `project-levels.md`    | 50               | 42           | See below
+| Feature implementation (level completeness) - refer `project-levels.md`    | 50               |              | See below
 |                                                                            |                  |              |
 | TESTING                                                                    | (25)             |              |
 | Unit tests (e.g. using Jest or Python's unittest) - `= coverage * 15/0.75` | 15               |              |
