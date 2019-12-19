@@ -6,7 +6,6 @@ install:
   - node -v  
   - npm install
   
-  
 services:
   - mysql
 
