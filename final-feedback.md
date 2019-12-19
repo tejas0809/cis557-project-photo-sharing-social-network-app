@@ -28,7 +28,7 @@
 Overal comment: 
 Features: Points taken off for not having the app deployed and ready to be demoed on Heroku. 
 
-Testing: 
+Testing: Travis build errors.
 
 Other: Good job with branching; however, could do a better job with pull requests and issues/user story tracking. These are important 
 to establishing a good dev workflow! Great job with documentation!
